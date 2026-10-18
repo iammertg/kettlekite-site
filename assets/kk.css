@@ -1,0 +1,129 @@
+/* Kettlekite shared base: dusk for the ground (the hour the kettle goes on), ivory for the words,
+   the kite's gold as the one accent. Every Kettlekite site copies this file (scripts/sync-shared.sh);
+   a game site sets its own --glow / --accent in theme.css and nothing else. */
+:root {
+  --dusk-0: #171b38;
+  --dusk-1: #222650;
+  --dusk-2: #3a3260;
+  --plum: #57405f;
+  --ember: #e9a06b;
+  --ivory: #f4ebdd;
+  --ivory-2: rgba(244, 235, 221, 0.76);
+  --ivory-3: rgba(244, 235, 221, 0.52);
+  --line: rgba(244, 235, 221, 0.15);
+  --well: rgba(244, 235, 221, 0.06);
+  --gold: #f2c46b;
+  --teal: #7fc8bd;
+  --glow: rgba(233, 160, 107, 0.28);
+  --accent: var(--gold);
+  --measure: 38rem;
+  --gutter: clamp(1.25rem, 5vw, 3rem);
+  --display: "Fraunces", "Iowan Old Style", "Palatino", Georgia, serif;
+  --body: "Nunito Sans", ui-rounded, system-ui, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; color-scheme: dark; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font: 500 1.125rem/1.6 var(--body);
+  color: var(--ivory);
+  background: var(--dusk-1) linear-gradient(180deg, var(--dusk-0) 0%, var(--dusk-1) 34%, var(--dusk-2) 78%, var(--plum) 100%) fixed;
+}
+img, svg { display: block; max-width: 100%; }
+a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 0.2em; text-decoration-color: var(--ivory-3); }
+a:hover { text-decoration-color: var(--accent); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+h1, h2, h3 { margin: 0; line-height: 1.12; text-wrap: balance; font-family: var(--display); font-weight: 500; font-variation-settings: "opsz" 144; }
+h1 { letter-spacing: -0.025em; }
+h2 { font-size: clamp(1.7rem, 3.6vw, 2.4rem); letter-spacing: -0.015em; }
+h3 { font-size: 1.25rem; font-weight: 600; font-variation-settings: "opsz" 36; }
+p { margin: 0 0 1rem; }
+.wrap { width: 100%; max-width: 72rem; margin: 0 auto; padding: 0 var(--gutter); }
+main { flex: 1; }
+.lede { color: var(--ivory-2); font-size: clamp(1.15rem, 2.2vw, 1.35rem); line-height: 1.5; max-width: 30ch; }
+.quiet { color: var(--ivory-3); font-size: 0.95rem; }
+
+/* Top bar */
+.bar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-top: 1.25rem; padding-bottom: 1.25rem; }
+.brand { display: inline-flex; align-items: center; gap: 0.6rem; font-weight: 800; font-size: 1.1rem; text-decoration: none; }
+.brand img { width: 36px; height: 36px; border-radius: 9px; }
+.nav { display: flex; gap: 1.4rem; font-size: 0.98rem; color: var(--ivory-2); }
+.nav a { text-decoration: none; }
+.nav a:hover { color: var(--ivory); }
+
+/* Buttons: one ivory pill, everything else a plain link */
+.actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.9rem 1.4rem; margin-top: 2rem; }
+.pill {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.8rem 1.4rem; border-radius: 999px;
+  background: var(--ivory); color: #241f2e; font-weight: 800; font-size: 1rem; text-decoration: none;
+}
+.pill:hover { background: #fff7ea; }
+.pill.ghost { background: transparent; color: var(--ivory); box-shadow: inset 0 0 0 1px var(--line); }
+.pill.ghost:hover { box-shadow: inset 0 0 0 1px var(--ivory-3); }
+
+/* Status chips, as on mertgozukara.com */
+.chip { display: inline-block; padding: 0.22rem 0.7rem; border-radius: 999px; font-size: 0.82rem; font-weight: 700; color: var(--ivory-2); box-shadow: inset 0 0 0 1px var(--line); white-space: nowrap; }
+.chip.soon { box-shadow: none; border: 1px dashed var(--ivory-3); }
+.chip.live { color: #1f2a26; background: var(--teal); box-shadow: none; }
+
+/* Sections */
+.section { padding-top: clamp(3.5rem, 8vw, 6rem); }
+.split { display: grid; grid-template-columns: minmax(0, 15rem) minmax(0, 1fr); gap: 1rem 3rem; }
+.split > h2 { font-size: clamp(1.6rem, 3vw, 2rem); }
+.split .body { max-width: var(--measure); color: var(--ivory-2); }
+.split .body strong { color: var(--ivory); font-weight: 700; }
+
+/* Game rows */
+.rows { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.row { border-bottom: 1px solid var(--line); }
+.row > a, .row > div { display: grid; grid-template-columns: 60px minmax(0, 1fr) auto; gap: 1.1rem; align-items: center; padding: 1.05rem 0.25rem; text-decoration: none; }
+.row > a:hover { background: var(--well); border-radius: 14px; }
+.row img, .row .icon { width: 60px; height: 60px; border-radius: 15px; }
+.row .name { font-weight: 800; font-size: 1.12rem; }
+.row .year { color: var(--ivory-3); font-size: 0.85rem; font-weight: 600; margin-left: 0.45rem; }
+.row .what { display: block; color: var(--ivory-2); font-size: 0.98rem; line-height: 1.45; }
+.row .end { display: flex; align-items: center; gap: 0.8rem; }
+.row .go { color: var(--ivory-3); font-size: 1.1rem; }
+.row > a:hover .go { color: var(--accent); }
+
+/* Phone frame for real screenshots */
+.phone { position: relative; width: min(300px, 72vw); aspect-ratio: 1320 / 2868; border-radius: 46px; padding: 11px; background: #0d0c12; box-shadow: 0 0 0 1.5px rgba(255, 255, 255, 0.12), 0 40px 80px -20px rgba(0, 0, 0, 0.6); }
+.phone img { width: 100%; height: 100%; object-fit: cover; border-radius: 36px; }
+
+/* Product hero (game sites) */
+.hero { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr); align-items: center; gap: 2rem 3rem; padding-top: clamp(2rem, 6vw, 4.5rem); padding-bottom: clamp(2rem, 6vw, 4rem); }
+.hero h1 { font-size: clamp(2.8rem, 7vw, 5rem); margin-bottom: 1.25rem; }
+.hero .stage { position: relative; display: grid; place-items: center; }
+.hero .stage::before { content: ""; position: absolute; inset: -12% -8%; background: radial-gradient(closest-side, var(--glow), transparent 72%); z-index: -1; }
+
+/* Long-form pages: privacy, terms, support */
+.doc { max-width: var(--measure); padding-top: clamp(2rem, 5vw, 3.5rem); padding-bottom: 2rem; }
+.doc h1 { font-size: clamp(2.2rem, 5vw, 3.2rem); margin-bottom: 0.6rem; }
+.doc h2 { font-size: 1.45rem; margin: 2.2rem 0 0.5rem; }
+.doc h3 { margin: 1.6rem 0 0.35rem; }
+.doc p, .doc li { color: var(--ivory-2); }
+.doc .quiet { margin-bottom: 1.6rem; }
+
+/* Footer */
+.foot { margin-top: clamp(4rem, 9vw, 7rem); border-top: 1px solid var(--line); padding-top: 1.6rem; padding-bottom: 2.5rem; font-size: 0.92rem; color: var(--ivory-3); }
+.foot .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.8rem 2rem; }
+.foot p { margin: 0; }
+.foot ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.4rem 1.3rem; }
+
+@media (max-width: 760px) {
+  .hero { grid-template-columns: 1fr; }
+  .hero .stage { order: -1; }
+  .phone { width: min(240px, 62vw); border-radius: 38px; padding: 9px; }
+  .phone img { border-radius: 30px; }
+  .split { grid-template-columns: 1fr; }
+  .row > a, .row > div { grid-template-columns: 52px minmax(0, 1fr); }
+  .row img, .row .icon { width: 52px; height: 52px; border-radius: 13px; }
+  .row .end { grid-column: 2; }
+  .nav { gap: 1rem; }
+}
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
