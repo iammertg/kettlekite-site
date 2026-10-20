@@ -1,0 +1,107 @@
+/* A Kettlekite game site: the game's name behind a live phone, how it plays, its pieces, its levels.
+   Shared by every game site (scripts/sync-shared.sh); colours come from the site's theme.css:
+   --bg (ground), --hero-1 / --hero-2 (the hero's light), --glow, --tint (cards), --accent. */
+
+/* ——— Hero ——— */
+.g-hero { position: relative; min-height: 100svh; overflow: hidden; isolation: isolate; background: radial-gradient(75% 70% at 50% 58%, var(--hero-1) 0%, var(--hero-2) 48%, var(--bg) 100%); }
+.g-hero::after { content: ""; position: absolute; inset: auto 0 0 0; height: 30%; background: linear-gradient(0deg, var(--bg), transparent); z-index: 3; pointer-events: none; }
+.g-name {
+  position: absolute; left: 0; right: 0; top: clamp(5.5rem, 14vh, 9rem); z-index: 0; margin: 0; text-align: center;
+  font-weight: 300; font-size: clamp(4.6rem, 17.5vw, 20rem); line-height: 0.82; letter-spacing: -0.05em; white-space: nowrap;
+  color: var(--ivory); transform: translateY(calc(var(--hp, 0) * -12vh));
+}
+.g-scene { position: absolute; inset: 0; z-index: 1; }
+.g-scene .float {
+  position: absolute; left: var(--x); top: var(--y); width: var(--w); height: auto;
+  transform: translate3d(calc(var(--mx, 0) * var(--d) * -26px), calc(var(--hp, 0) * var(--d) * -30vh), 0) rotate(var(--r));
+  filter: drop-shadow(0 26px 34px rgba(8, 4, 10, 0.42));
+  animation: bob calc(5s + var(--d) * 2s) ease-in-out infinite alternate; animation-delay: calc(var(--d) * -1.7s);
+}
+@keyframes bob { from { translate: 0 -0.6rem; } to { translate: 0 0.6rem; } }
+.g-device { position: absolute; z-index: 2; left: 50%; top: clamp(13rem, 37vh, 22rem); transform: translate(-50%, calc(var(--hp, 0) * -8vh)); }
+.g-device .phone { width: clamp(230px, 20vw, 320px); }
+.g-copy {
+  position: relative; z-index: 4; min-height: 100svh; display: grid; grid-template-columns: minmax(0, 24rem) 1fr minmax(0, 20rem);
+  align-items: end; gap: 2rem; padding-bottom: clamp(2.5rem, 7vh, 4.5rem);
+}
+.g-lede { font-family: var(--display); font-weight: 340; font-size: clamp(1.8rem, 2.6vw, 2.6rem); line-height: 1.08; letter-spacing: -0.02em; margin-bottom: 0.8rem; font-variation-settings: "opsz" 96; }
+.g-sub { color: var(--ivory-2); margin: 0; }
+.g-cta { grid-column: 3; justify-self: end; text-align: right; }
+.g-cta .actions { justify-content: flex-end; margin-top: 0; }
+.g-cta .help { display: inline-block; margin-top: 0.9rem; color: var(--ivory-2); }
+.studio-mark { display: inline-flex; align-items: center; gap: 0.5rem; margin-top: 1.4rem; color: var(--ivory-2); text-decoration: none; font-size: 0.95rem; }
+.studio-mark svg { width: 18px; height: 18px; }
+.studio-mark:hover { color: var(--ivory); }
+
+/* ——— Section heads ——— */
+.g-section { padding-top: clamp(6rem, 13vw, 11rem); }
+.g-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 30rem); gap: 1.5rem 4rem; align-items: end; margin-bottom: clamp(2.5rem, 6vw, 4.5rem); }
+.g-head h2 { font-size: clamp(2.8rem, 6vw, 6rem); font-weight: 300; letter-spacing: -0.04em; line-height: 0.95; }
+.g-head p { color: var(--ivory-2); margin: 0; font-size: 1.1rem; }
+
+/* ——— How it plays: three moments, each a screen ——— */
+.beats { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(1.5rem, 4vw, 4rem); }
+.beat:nth-child(2) { margin-top: clamp(2rem, 7vw, 6rem); }
+.beat:nth-child(3) { margin-top: clamp(4rem, 14vw, 12rem); }
+.beat .shot { width: min(100%, 300px); aspect-ratio: 1320 / 2868; border-radius: 36px; padding: 9px; background: #0b0a10; box-shadow: 0 0 0 1.5px rgba(255, 255, 255, 0.12), 0 40px 80px -30px rgba(0, 0, 0, 0.75); transform: rotate(var(--tilt, 0deg)); }
+.beat .shot img { width: 100%; height: 100%; object-fit: cover; border-radius: 28px; }
+.beat h3 { font-size: clamp(1.6rem, 2.2vw, 2.1rem); font-weight: 350; margin: 1.8rem 0 0.6rem; letter-spacing: -0.02em; }
+.beat p { color: var(--ivory-2); max-width: 26ch; margin: 0; }
+
+/* ——— The pieces ——— */
+.shelf { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(1rem, 2.5vw, 2rem); }
+.shelf section { border-radius: 28px; padding: clamp(1.4rem, 2.6vw, 2.2rem); background: radial-gradient(120% 90% at 0% 0%, var(--tint), transparent 70%), rgba(244, 235, 221, 0.03); box-shadow: inset 0 0 0 1px var(--line); }
+.shelf h3 { font-size: 1.9rem; font-weight: 350; margin-bottom: 1.4rem; letter-spacing: -0.02em; }
+.items { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.2rem 1rem; }
+.items li { display: grid; justify-items: center; gap: 0.5rem; text-align: center; font-size: 0.92rem; color: var(--ivory-2); }
+.items img { height: clamp(84px, 9vw, 130px); width: auto; max-width: 100%; object-fit: contain; filter: drop-shadow(0 16px 20px rgba(0, 0, 0, 0.35)); transition: transform 0.7s var(--ease); }
+.items li:hover img { transform: translateY(-6px) rotate(-4deg) scale(1.05); }
+
+/* tricks: four boards, two by two */
+.tricks { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(1rem, 2.5vw, 2rem); }
+.trick { border-radius: 28px; overflow: hidden; background: rgba(244, 235, 221, 0.03); box-shadow: inset 0 0 0 1px var(--line); }
+.trick img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; }
+.trick div { padding: 1.4rem 1.6rem 1.7rem; }
+.trick h3 { font-size: 1.7rem; font-weight: 350; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+.trick p { color: var(--ivory-2); margin: 0; }
+.orders { display: flex; align-items: flex-end; justify-content: center; gap: clamp(0.4rem, 2vw, 2.2rem); flex-wrap: wrap; margin-top: clamp(3rem, 7vw, 5rem); }
+.orders img { height: clamp(70px, 9vw, 150px); width: auto; filter: drop-shadow(0 18px 22px rgba(0, 0, 0, 0.4)); }
+.orders img:nth-child(odd) { transform: translateY(-0.8rem) rotate(-6deg); }
+.orders img:nth-child(even) { transform: rotate(5deg); }
+
+/* ——— Levels: a strip of screens that slides as the page scrolls ——— */
+.levels { overflow: hidden; padding-bottom: 1rem; }
+.strip { display: flex; gap: clamp(1rem, 2vw, 1.8rem); width: max-content; padding: 0 var(--gutter); transform: translateX(calc(var(--sp, 0) * -1 * var(--travel, 0px))); }
+.strip figure { margin: 0; width: clamp(170px, 17vw, 260px); aspect-ratio: 1320 / 2868; border-radius: 30px; padding: 8px; background: #0b0a10; box-shadow: 0 0 0 1.5px rgba(255, 255, 255, 0.1), 0 30px 60px -25px rgba(0, 0, 0, 0.7); flex: none; }
+.strip figure:nth-child(even) { margin-top: 3rem; }
+.strip img { width: 100%; height: 100%; object-fit: cover; border-radius: 23px; }
+
+/* ——— Calm, and the sister game ——— */
+.calm { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 30rem); gap: 1.5rem 4rem; align-items: end; }
+.calm h2 { font-size: clamp(2.6rem, 5.4vw, 5.4rem); font-weight: 300; letter-spacing: -0.04em; line-height: 0.98; }
+.calm p { color: var(--ivory-2); margin: 0 0 0.8rem; }
+.sister { display: flex; align-items: center; gap: 1.4rem; margin: clamp(5rem, 11vw, 9rem) 0 clamp(4rem, 8vw, 6rem); padding: clamp(1.2rem, 2.4vw, 2rem); border-radius: 28px; text-decoration: none; background: radial-gradient(110% 120% at 100% 0%, var(--sister-tint, rgba(255, 255, 255, 0.06)), transparent 70%), rgba(244, 235, 221, 0.03); box-shadow: inset 0 0 0 1px var(--line); transition: box-shadow 0.4s var(--ease); }
+.sister:hover { box-shadow: inset 0 0 0 1px var(--ivory-3); }
+.sister img { width: 72px; height: 72px; border-radius: 17px; }
+.sister strong { display: block; font-family: var(--display); font-weight: 400; font-size: 1.7rem; letter-spacing: -0.02em; }
+.sister span { color: var(--ivory-2); }
+
+@media (max-width: 860px) {
+  .g-name { top: 5.2rem; font-size: 19vw; }
+  .g-device { top: 9.6rem; }
+  .g-device .phone { width: min(52vw, 230px); }
+  .g-copy { grid-template-columns: 1fr; align-content: end; min-height: 0; padding-top: calc(9.6rem + min(52vw, 230px) * 2.18 + 1.5rem); }
+  .g-cta { grid-column: 1; justify-self: start; text-align: left; }
+  .g-cta .actions { justify-content: flex-start; }
+  .g-head, .calm { grid-template-columns: 1fr; }
+  .beats { grid-template-columns: 1fr; gap: 3.5rem; }
+  .beat:nth-child(n) { margin-top: 0; }
+  .beat .shot { width: min(72vw, 280px); }
+  .shelf { grid-template-columns: 1fr; }
+  .tricks { grid-template-columns: 1fr; }
+  .g-scene .float { width: calc(var(--w) * 1.6); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .g-scene .float { animation: none; }
+  .strip { transform: none; overflow-x: auto; }
+}

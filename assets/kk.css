@@ -51,7 +51,8 @@ p { margin: 0 0 1rem; text-wrap: pretty; }
   padding: 1.1rem var(--gutter);
   transition: background 0.5s var(--ease), padding 0.5s var(--ease);
 }
-.bar.veiled { background: color-mix(in srgb, var(--bg) 78%, transparent); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); padding-top: 0.75rem; padding-bottom: 0.75rem; }
+/* long pages have no script to veil the bar, so it is veiled from the start */
+.bar.veiled, body:has(.doc) .bar { background: color-mix(in srgb, var(--bg) 78%, transparent); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); padding-top: 0.75rem; padding-bottom: 0.75rem; }
 .brand { display: inline-flex; align-items: center; gap: 0.7rem; text-decoration: none; font-family: var(--display); font-weight: 450; font-size: 1.3rem; letter-spacing: -0.01em; font-variation-settings: "opsz" 48; }
 .brand img { width: 34px; height: 34px; border-radius: 9px; }
 .brand .kite { width: 22px; height: 22px; }
@@ -104,6 +105,7 @@ p { margin: 0 0 1rem; text-wrap: pretty; }
 
 @media (max-width: 760px) {
   .nav { gap: 1rem; font-size: 0.92rem; }
+  .nav:has(a:not([href^="#"])) a[href^="#"] { display: none; } /* game sites keep Support on phones */
   .brand { font-size: 1.15rem; }
 }
 @media (prefers-reduced-motion: reduce) {
