@@ -64,8 +64,9 @@
 .trick div { padding: 1.4rem 1.6rem 1.7rem; }
 .trick h3 { font-size: 1.7rem; font-weight: 350; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
 .trick p { color: var(--ivory-2); margin: 0; }
-.orders { display: flex; align-items: flex-end; justify-content: center; gap: clamp(0.4rem, 2vw, 2.2rem); flex-wrap: wrap; margin-top: clamp(3rem, 7vw, 5rem); }
-.orders img { height: clamp(70px, 9vw, 150px); width: auto; filter: drop-shadow(0 18px 22px rgba(0, 0, 0, 0.4)); }
+/* one row on wide screens: wide desserts (a banana, a chocolate bar) shrink with the rest rather than wrap */
+.orders { display: flex; align-items: flex-end; justify-content: center; gap: clamp(0.4rem, 2vw, 2.2rem); margin-top: clamp(3rem, 7vw, 5rem); }
+.orders img { flex: 0 1 auto; min-width: 0; height: auto; max-height: clamp(70px, 9vw, 150px); filter: drop-shadow(0 18px 22px rgba(0, 0, 0, 0.4)); }
 .orders img:nth-child(odd) { transform: translateY(-0.8rem) rotate(-6deg); }
 .orders img:nth-child(even) { transform: rotate(5deg); }
 
@@ -87,6 +88,8 @@
 .sister span { color: var(--ivory-2); }
 
 @media (max-width: 860px) {
+  .orders { flex-wrap: wrap; }
+  .orders img { flex: none; height: clamp(70px, 9vw, 150px); max-height: none; }
   .g-name { top: 5.2rem; font-size: 19vw; }
   .g-device { top: 9.6rem; }
   .g-device .phone { width: min(52vw, 230px); }
