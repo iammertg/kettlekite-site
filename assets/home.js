@@ -137,24 +137,33 @@
     for (const b of bows.children) b.classList.toggle("on", +b.dataset.y < reach);
   }
 
-  // chapter progress: 0 when its stage pins, 1 when the next chapter starts to cover it
+  // chapter motion: --p runs 0 → 1 while a chapter rises into view, --x 0 → 1 while it leaves
   function chapterMotion() {
     for (const c of chapters) {
       const r = c.getBoundingClientRect();
-      const range = Math.max(1, c.offsetHeight - vh);
-      const p = Math.min(1, Math.max(0, -r.top / range));
+      const p = Math.min(1, Math.max(0, 1 - r.top / vh));
+      const x = Math.min(1, Math.max(0, -r.top / vh));
       c.style.setProperty("--p", p.toFixed(4));
+      c.style.setProperty("--x", x.toFixed(4));
       const near = r.top < vh * 2 && r.bottom > -vh;
       const visible = r.top < vh && r.bottom > 0;
       for (const v of c.querySelectorAll("video")) video(v, near, visible);
     }
   }
 
+  // AV1 holds the film chapters' detail at a fraction of the size, but only where the hardware
+  // decodes it; a software AV1 decode would cost more than the sharper picture is worth
+  let av1 = false;
+  navigator.mediaCapabilities?.decodingInfo({
+    type: "file",
+    video: { contentType: 'video/mp4; codecs="av01.0.12M.10"', width: 2560, height: 1440, bitrate: 6e6, framerate: 30 },
+  }).then((r) => (av1 = r.supported && r.powerEfficient)).catch(() => {});
+
   function video(v, near, visible) {
     if (near && !v.src) {
       const small = v.dataset.srcSmall && innerWidth < 900;
-      v.src = small ? v.dataset.srcSmall : v.dataset.src;
-      v.addEventListener("error", () => { if (small && v.src.endsWith(v.dataset.srcSmall)) v.src = v.dataset.src; }, { once: true });
+      v.src = small ? v.dataset.srcSmall : (av1 && v.dataset.srcAv1) || v.dataset.src;
+      v.addEventListener("error", () => { if (!v.src.endsWith(v.dataset.src)) v.src = v.dataset.src; }, { once: true });
     }
     if (!v.src) return;
     if (visible && v.paused && !reduce) v.play().catch(() => {});
