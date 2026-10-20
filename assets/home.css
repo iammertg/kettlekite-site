@@ -79,7 +79,7 @@
 /* film: the game itself, full bleed */
 .film { height: 175vh; }
 .film .stage { background: #08090f; }
-.film .bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform: scale(calc(1.16 - var(--p, 0) * 0.16)); }
+.film .bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform: scale(calc(1.2 - var(--p, 0) * 0.09)); }
 .film .shade {
   position: absolute; inset: 0;
   background:
