@@ -32,7 +32,12 @@
       c.setAttribute("cy", y.toFixed(1));
       c.setAttribute("r", (0.5 + rnd() * rnd() * 1.4).toFixed(2));
       c.setAttribute("opacity", (0.25 + rnd() * 0.6 * (1 - y / h)).toFixed(2));
-      if (rnd() < 0.3) { c.classList.add("tw"); c.style.animationDelay = `${(-rnd() * 4.5).toFixed(2)}s`; }
+      if (rnd() < 0.45) {
+        c.classList.add("tw");
+        const t = 3 + rnd() * 4;
+        c.style.animationDuration = `${t.toFixed(2)}s`;
+        c.style.animationDelay = `${(-rnd() * t).toFixed(2)}s`;
+      }
       svg.append(c);
     }
   }
@@ -186,21 +191,59 @@
     sky.style.setProperty("--wx", ((e.clientX / innerWidth) * 2 - 1).toFixed(3));
   });
 
+  // a star falls every few seconds while the sky is in view
+  const meteors = sky.querySelector(".meteors");
+  let skyInView = true;
+  new IntersectionObserver(([e]) => (skyInView = e.isIntersecting)).observe(sky);
+  function meteor() {
+    if (skyInView && !document.hidden) {
+      const m = document.createElement("i");
+      const w = meteors.clientWidth, h = meteors.clientHeight;
+      const right = Math.random() < 0.5; // falls toward the lower right or the lower left
+      m.className = "meteor";
+      m.style.setProperty("--x", `${(0.12 + Math.random() * 0.66) * w}px`);
+      m.style.setProperty("--y", `${(0.04 + Math.random() * 0.4) * h}px`);
+      m.style.setProperty("--a", `${right ? 18 + Math.random() * 14 : 148 + Math.random() * 14}deg`);
+      m.style.setProperty("--len", `${110 + Math.random() * 90}px`);
+      m.style.setProperty("--d", `${Math.min(w * 0.3, 260 + Math.random() * 160)}px`);
+      m.style.setProperty("--t", `${0.95 + Math.random() * 0.45}s`);
+      m.addEventListener("animationend", () => m.remove());
+      meteors.append(m);
+    }
+    setTimeout(meteor, 5000 + Math.random() * 7000);
+  }
+
   // the index shows a frame of each game beside the pointer
   const peek = document.querySelector(".peek");
   if (hover && peek) {
-    const img = peek.querySelector("img");
+    const frames = new Map();
+    let offset = 170, x = 0, y = 0;
+    const follow = () => {
+      peek.style.setProperty("--px", `${x + offset}px`);
+      peek.style.setProperty("--py", `${y}px`);
+    };
     for (const a of document.querySelectorAll(".games a")) {
+      const img = document.createElement("img");
+      img.alt = "";
+      if (a.getAttribute("href").includes("jam")) img.className = "tall";
+      peek.append(img);
+      frames.set(a, img);
       a.addEventListener("pointerenter", () => {
-        img.src = a.dataset.preview;
-        peek.classList.toggle("tall", a.getAttribute("href").includes("jam"));
+        for (const [b, f] of frames) f.classList.toggle("on", b === a);
+        offset = 36 + img.offsetWidth / 2; // the frame's left edge sits just right of the pointer
+        follow();
         peek.classList.add("on");
       });
       a.addEventListener("pointerleave", () => peek.classList.remove("on"));
     }
+    // load and decode all four once, before the first hover can need one
+    const load = () => { for (const [a, img] of frames) if (!img.src) { img.src = a.dataset.preview; img.decode().catch(() => {}); } };
+    setTimeout(load, 2600);
+    document.querySelector(".games").addEventListener("pointerenter", load, { once: true });
     document.querySelector(".games").addEventListener("pointermove", (e) => {
-      peek.style.setProperty("--px", `${e.clientX + 170}px`);
-      peek.style.setProperty("--py", `${e.clientY}px`);
+      x = e.clientX;
+      y = e.clientY;
+      follow();
     });
   }
 
@@ -219,6 +262,7 @@
   const start = () => {
     layout();
     requestAnimationFrame(() => sky.classList.add("ready"));
+    if (!reduce) setTimeout(meteor, 3600);
     setTimeout(() => { sky.classList.add("landed"); ribbon.style.transition = "stroke-dashoffset 1.2s cubic-bezier(.45,0,.2,1)"; draw(); setTimeout(() => (ribbon.style.transition = ""), 1300); }, reduce ? 0 : 2300);
   };
   (document.fonts ? Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 900))]) : Promise.resolve()).then(start);
