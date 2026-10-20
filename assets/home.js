@@ -1,0 +1,225 @@
+// kettlekite.com: the opening, the kite's string and tail, chapter motion, lazy videos and the index preview.
+(() => {
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const hover = matchMedia("(hover: hover) and (pointer: fine)").matches;
+  const svgNS = "http://www.w3.org/2000/svg";
+  const sky = document.querySelector(".sky");
+  const flyer = sky.querySelector(".flyer");
+  const kettle = sky.querySelector(".kettle");
+  const string = sky.querySelector(".string path");
+  const bar = document.querySelector(".bar");
+  const tail = document.querySelector(".tail");
+  const ribbon = tail.querySelector(".ribbon");
+  const bows = tail.querySelector(".bows");
+  const chapters = [...document.querySelectorAll(".chapter")];
+  let vh = innerHeight;
+
+  sky.querySelectorAll(".wordmark span").forEach((s, i) => s.style.setProperty("--i", i));
+
+  // a seeded random so the stars sit in the same places on every visit
+  const seeded = (seed) => () => ((seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296);
+
+  function stars() {
+    const svg = sky.querySelector(".stars");
+    const w = svg.clientWidth, h = svg.clientHeight, rnd = seeded(11);
+    svg.setAttribute("viewBox", `0 0 ${w} ${h}`);
+    svg.replaceChildren();
+    const count = Math.round((w * h) / 16000);
+    for (let i = 0; i < count; i++) {
+      const c = document.createElementNS(svgNS, "circle");
+      const y = rnd() ** 1.4 * h; // denser high up, thinning toward the glow
+      c.setAttribute("cx", (rnd() * w).toFixed(1));
+      c.setAttribute("cy", y.toFixed(1));
+      c.setAttribute("r", (0.5 + rnd() * rnd() * 1.4).toFixed(2));
+      c.setAttribute("opacity", (0.25 + rnd() * 0.6 * (1 - y / h)).toFixed(2));
+      if (rnd() < 0.3) { c.classList.add("tw"); c.style.animationDelay = `${(-rnd() * 4.5).toFixed(2)}s`; }
+      svg.append(c);
+    }
+  }
+
+  // Where the kite's lower tip and the kettle's spout are, in page pixels. Offsets ignore the
+  // opening transforms, so these are the resting positions the kite flies into.
+  const tip = () => [flyer.offsetLeft + flyer.offsetWidth / 2, flyer.offsetTop + flyer.offsetHeight * 0.97];
+  const spout = () => [kettle.offsetLeft + kettle.offsetWidth * (190 / 220), kettle.offsetTop + kettle.offsetHeight * (74 / 170)];
+
+  function layoutString() {
+    const w = sky.clientWidth, h = sky.clientHeight;
+    string.parentNode.setAttribute("viewBox", `0 0 ${w} ${h}`);
+    const [kx, ky] = tip(), [sx, sy] = spout();
+    // the string sags between the spout and the kite, bellied away from the wind
+    string.setAttribute("d", `M${sx} ${sy} C ${sx - w * 0.02} ${sy - h * 0.3}, ${kx + w * 0.07} ${ky + h * 0.26}, ${kx} ${ky}`);
+    string.style.setProperty("--len", string.getTotalLength().toFixed(0));
+  }
+
+  // The tail: from the kite's tip it swings across the sky above the name, drops down the left
+  // margin and runs beside the list of games, a bow beside each one.
+  let samples = [], length = 0;
+  function layoutTail() {
+    const w = document.documentElement.clientWidth;
+    const h = document.documentElement.scrollHeight;
+    tail.setAttribute("viewBox", `0 0 ${w} ${h}`);
+    tail.style.height = `${h}px`;
+    const gutter = parseFloat(getComputedStyle(document.querySelector(".index")).paddingLeft) || 24;
+    const edge = w < 600 ? 9 : Math.max(14, gutter * 0.46);
+    const [kx, ky] = tip();
+    const top = sky.querySelector(".wordmark").offsetTop + sky.querySelector(".sky-copy").offsetTop;
+    const arc = Math.min(ky + vh * 0.14, top - vh * 0.06); // the lowest the arc may sag before the name
+    const pts = [[kx, ky], [kx - w * 0.12, ky + (arc - ky) * 0.55], [w * 0.4, arc], [w * 0.13, arc + vh * 0.02], [edge, arc + vh * 0.12], [edge, top + vh * 0.2]];
+    const rows = [...document.querySelectorAll(".games li")];
+    // each bow sits level with the game's name
+    const knots = rows.map((li) => { const r = li.querySelector(".g-name").getBoundingClientRect(); return [edge, r.top + scrollY + r.height * 0.55]; });
+    let side = 1;
+    for (const k of knots) {
+      const last = pts[pts.length - 1];
+      pts.push([edge + side * Math.min(10, w * 0.008), (last[1] + k[1]) / 2], k);
+      side = -side;
+    }
+    // the end of the tail curls under the last game
+    const end = knots[knots.length - 1];
+    pts.push([edge + 14, end[1] + 60], [edge + 32, end[1] + 70]);
+    ribbon.setAttribute("d", smooth(pts));
+    length = ribbon.getTotalLength();
+    ribbon.style.strokeDasharray = `${length} ${length}`;
+    // y → drawn length, from evenly spaced samples (the tail only ever runs downward past the sky)
+    samples = [];
+    const n = 700;
+    let maxY = 0;
+    for (let i = 0; i <= n; i++) {
+      const l = (length * i) / n, p = ribbon.getPointAtLength(l);
+      maxY = Math.max(maxY, p.y);
+      samples.push([maxY, l]);
+    }
+    bows.replaceChildren(...knots.map(([x, y], i) => bow(x, y, i)));
+    draw();
+  }
+
+  // Catmull-Rom through the points, as cubic Béziers
+  function smooth(p) {
+    let d = `M${p[0][0]} ${p[0][1]}`;
+    for (let i = 0; i < p.length - 1; i++) {
+      const p0 = p[i - 1] || p[i], p1 = p[i], p2 = p[i + 1], p3 = p[i + 2] || p2;
+      d += ` C ${p1[0] + (p2[0] - p0[0]) / 6} ${p1[1] + (p2[1] - p0[1]) / 6}, ${p2[0] - (p3[0] - p1[0]) / 6} ${p2[1] - (p3[1] - p1[1]) / 6}, ${p2[0]} ${p2[1]}`;
+    }
+    return d;
+  }
+
+  // a bow like the ones on the kite's tail in the logo: two little sails, gold and teal
+  function bow(x, y, i) {
+    const g = document.createElementNS(svgNS, "g");
+    g.setAttribute("class", "bow");
+    g.dataset.y = y;
+    const rot = i % 2 ? 14 : -10;
+    const size = document.documentElement.clientWidth < 600 ? 0.62 : 1;
+    g.innerHTML = `<g transform="translate(${x} ${y}) rotate(${rot}) scale(${size})"><path d="M0 0 L-12 -6 L-11 6 Z" fill="${i % 2 ? "#5fa59a" : "#f0a92e"}"/><path d="M0 0 L12 -6 L11 6 Z" fill="${i % 2 ? "#f0a92e" : "#5fa59a"}"/><circle r="2" fill="#f4ebdd"/></g>`;
+    return g;
+  }
+
+  function lengthAt(y) {
+    let lo = 0, hi = samples.length - 1;
+    if (!samples.length) return 0;
+    if (y >= samples[hi][0]) return length;
+    while (lo < hi) { const m = (lo + hi) >> 1; if (samples[m][0] < y) lo = m + 1; else hi = m; }
+    return samples[lo][1];
+  }
+
+  let shown = 0;
+  function draw() {
+    const reach = reduce ? Infinity : scrollY + vh * 0.9;
+    // during the opening the tail waits until the kite has landed
+    const target = sky.classList.contains("landed") || reduce ? lengthAt(reach) : 0;
+    shown = target;
+    ribbon.style.strokeDashoffset = `${length - shown}`;
+    for (const b of bows.children) b.classList.toggle("on", +b.dataset.y < reach);
+  }
+
+  // chapter progress: 0 when its stage pins, 1 when the next chapter starts to cover it
+  function chapterMotion() {
+    for (const c of chapters) {
+      const r = c.getBoundingClientRect();
+      const range = Math.max(1, c.offsetHeight - vh);
+      const p = Math.min(1, Math.max(0, -r.top / range));
+      c.style.setProperty("--p", p.toFixed(4));
+      const near = r.top < vh * 2 && r.bottom > -vh;
+      const visible = r.top < vh && r.bottom > 0;
+      for (const v of c.querySelectorAll("video")) video(v, near, visible);
+    }
+  }
+
+  function video(v, near, visible) {
+    if (near && !v.src) {
+      const small = v.dataset.srcSmall && innerWidth < 900;
+      v.src = small ? v.dataset.srcSmall : v.dataset.src;
+      v.addEventListener("error", () => { if (small && v.src.endsWith(v.dataset.srcSmall)) v.src = v.dataset.src; }, { once: true });
+    }
+    if (!v.src) return;
+    if (visible && v.paused && !reduce) v.play().catch(() => {});
+    else if (!visible && !v.paused) v.pause();
+  }
+
+  let ticking = false;
+  function frame() {
+    ticking = false;
+    bar.classList.toggle("veiled", scrollY > 40);
+    chapterMotion();
+    draw();
+  }
+  const request = () => { if (!ticking) { ticking = true; requestAnimationFrame(frame); } };
+
+  function layout() {
+    vh = innerHeight;
+    stars();
+    layoutString();
+    layoutTail();
+    frame();
+  }
+
+  // showcase scenes lean away from the pointer
+  for (const c of document.querySelectorAll(".showcase")) {
+    c.addEventListener("pointermove", (e) => {
+      if (reduce || e.pointerType !== "mouse") return;
+      c.style.setProperty("--mx", ((e.clientX / innerWidth) * 2 - 1).toFixed(3));
+    });
+  }
+  // the kite answers the pointer like a gust
+  sky.addEventListener("pointermove", (e) => {
+    if (reduce || e.pointerType !== "mouse") return;
+    sky.style.setProperty("--wx", ((e.clientX / innerWidth) * 2 - 1).toFixed(3));
+  });
+
+  // the index shows a frame of each game beside the pointer
+  const peek = document.querySelector(".peek");
+  if (hover && peek) {
+    const img = peek.querySelector("img");
+    for (const a of document.querySelectorAll(".games a")) {
+      a.addEventListener("pointerenter", () => {
+        img.src = a.dataset.preview;
+        peek.classList.toggle("tall", a.getAttribute("href").includes("jam"));
+        peek.classList.add("on");
+      });
+      a.addEventListener("pointerleave", () => peek.classList.remove("on"));
+    }
+    document.querySelector(".games").addEventListener("pointermove", (e) => {
+      peek.style.setProperty("--px", `${e.clientX + 170}px`);
+      peek.style.setProperty("--py", `${e.clientY}px`);
+    });
+  }
+
+  // reveal blocks as they come into view
+  const io = new IntersectionObserver((entries) => {
+    for (const e of entries) if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+  }, { threshold: 0.15 });
+  document.querySelectorAll(".rise").forEach((el) => io.observe(el));
+
+  addEventListener("scroll", request, { passive: true });
+  let resizeTimer = 0;
+  addEventListener("resize", () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(layout, 150); });
+  // sections change height when fonts and media settle; the tail follows
+  new ResizeObserver(() => { clearTimeout(resizeTimer); resizeTimer = setTimeout(layout, 150); }).observe(document.body);
+
+  const start = () => {
+    layout();
+    requestAnimationFrame(() => sky.classList.add("ready"));
+    setTimeout(() => { sky.classList.add("landed"); ribbon.style.transition = "stroke-dashoffset 1.2s cubic-bezier(.45,0,.2,1)"; draw(); setTimeout(() => (ribbon.style.transition = ""), 1300); }, reduce ? 0 : 2300);
+  };
+  (document.fonts ? Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 900))]) : Promise.resolve()).then(start);
+})();

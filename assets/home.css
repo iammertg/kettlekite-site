@@ -1,0 +1,172 @@
+/* kettlekite.com: the sky, the index of games, one chapter per game, the studio. */
+
+/* ——— The sky ——— */
+.sky {
+  position: relative; height: 100svh; min-height: 620px; overflow: hidden; isolation: isolate;
+  background: linear-gradient(180deg, #090b1b 0%, #12163a 34%, #23255a 60%, #463459 80%, #6e4553 100%);
+}
+.sky-glow {
+  position: absolute; left: -20%; right: -20%; bottom: -34%; height: 80%; z-index: -1;
+  background: radial-gradient(48% 58% at 64% 100%, rgba(240, 165, 108, 0.62), rgba(170, 108, 120, 0.2) 52%, transparent 76%);
+}
+.stars { position: absolute; inset: 0 0 30% 0; width: 100%; height: 70%; }
+.stars circle { fill: var(--ivory); }
+.stars .tw { animation: twinkle 4.5s ease-in-out infinite; }
+@keyframes twinkle { 0%, 100% { opacity: 0.25; } 50% { opacity: 0.95; } }
+
+.string { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.string path { fill: none; stroke: var(--ivory); stroke-opacity: 0.62; stroke-width: 1.2; stroke-linecap: round; }
+
+/* the kite turns about its lower tip, where the string and the tail are tied */
+.flyer { position: absolute; left: 71%; top: 11%; width: clamp(104px, 12.5vw, 200px); transform-origin: 50% 97%; transform: rotate(calc(var(--wx, 0) * 7deg)); transition: transform 1.6s var(--ease); }
+.kite-big { width: 100%; height: auto; transform-origin: 50% 97%; animation: sway 7.5s ease-in-out infinite; filter: drop-shadow(0 18px 30px rgba(10, 8, 30, 0.45)); }
+@keyframes sway { 0%, 100% { transform: rotate(-4deg); } 50% { transform: rotate(5deg); } }
+
+.kettle { position: absolute; right: calc(var(--gutter) + 1vw); bottom: 6%; width: clamp(104px, 11vw, 180px); }
+.kettle::before { content: ""; position: absolute; inset: 30% -40% -20% -40%; background: radial-gradient(closest-side, rgba(242, 196, 107, 0.32), transparent); z-index: -1; }
+.kettle svg { width: 100%; height: auto; }
+.steam path { animation: steam 3.2s linear infinite; stroke-opacity: 0.7; }
+.steam path + path { animation-duration: 4.1s; }
+@keyframes steam { to { stroke-dashoffset: -40; } }
+
+.sky-copy { position: absolute; left: 0; right: 0; bottom: clamp(2rem, 7vh, 5rem); pointer-events: none; }
+.wordmark { font-weight: 290; font-size: clamp(4.4rem, 18.6vw, 21rem); line-height: 0.82; letter-spacing: -0.048em; margin-left: -0.045em; white-space: nowrap; }
+.wordmark span { display: inline-block; }
+.lede { max-width: 31ch; margin: clamp(1rem, 2.4vh, 1.8rem) 0 0; font-size: clamp(1.1rem, 1.55vw, 1.38rem); line-height: 1.5; color: var(--ivory-2); }
+
+/* the opening: the kite rises from the sill, the string pays out, the name stands up */
+.js .sky .flyer { opacity: 0; transform: translate(-34vw, 52vh) rotate(-28deg) scale(0.55); }
+.js .sky .wordmark span { opacity: 0; transform: translateY(42%); }
+.js .sky .lede { opacity: 0; transform: translateY(1rem); }
+.js .sky .string path { stroke-dasharray: var(--len, 2000); stroke-dashoffset: var(--len, 2000); }
+.js .sky.ready .flyer { opacity: 1; transform: rotate(calc(var(--wx, 0) * 7deg)); transition: opacity 0.6s ease, transform 2s var(--ease); }
+.js .sky.ready .wordmark span { opacity: 1; transform: none; transition: opacity 1s ease, transform 1.4s var(--ease); transition-delay: calc(0.35s + var(--i) * 0.055s); }
+.js .sky.ready .lede { opacity: 1; transform: none; transition: opacity 1s ease 1.15s, transform 1.2s var(--ease) 1.15s; }
+.js .sky.ready .string path { stroke-dashoffset: 0; transition: stroke-dashoffset 1.8s cubic-bezier(0.45, 0, 0.2, 1) 0.9s; }
+
+/* ——— Index of games ——— */
+.index { position: relative; padding-top: clamp(5rem, 12vw, 10rem); padding-bottom: clamp(5rem, 11vw, 9rem); }
+.games { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.games a {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 24rem) minmax(0, 13rem); align-items: baseline; gap: 0.4rem 2rem;
+  padding: clamp(1.1rem, 2.3vw, 1.9rem) 0; border-bottom: 1px solid var(--line); text-decoration: none;
+  transition: opacity 0.5s var(--ease);
+}
+.g-name { font-family: var(--display); font-weight: 310; font-size: clamp(2.3rem, 5.8vw, 5.2rem); line-height: 1; letter-spacing: -0.035em; font-variation-settings: "opsz" 144; transition: transform 0.7s var(--ease); }
+.g-what { color: var(--ivory-2); font-size: clamp(1rem, 1.25vw, 1.15rem); }
+.g-where { color: var(--ivory-3); font-size: 0.95rem; text-align: right; white-space: nowrap; }
+.games a:hover .g-name, .games a:focus-visible .g-name { transform: translateX(0.8rem); }
+@media (hover: hover) { .games:hover a:not(:hover) { opacity: 0.38; } }
+.peek {
+  position: fixed; left: 0; top: 0; z-index: 40; margin: 0; pointer-events: none;
+  width: clamp(220px, 21vw, 340px); aspect-ratio: 16 / 10; border-radius: 14px; overflow: hidden;
+  opacity: 0; transform: translate3d(var(--px, 0), var(--py, 0), 0) translate(-50%, -50%) scale(0.86) rotate(-3deg);
+  transition: opacity 0.35s ease, transform 0.6s var(--ease), width 0.4s var(--ease), aspect-ratio 0.4s var(--ease);
+  box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.6);
+}
+.peek.tall { width: clamp(130px, 11vw, 180px); aspect-ratio: 506 / 1100; }
+.peek.on { opacity: 1; transform: translate3d(var(--px, 0), var(--py, 0), 0) translate(-50%, -50%) scale(1) rotate(-2deg); }
+.peek img { width: 100%; height: 100%; object-fit: cover; }
+
+/* ——— Chapters: a stage pinned while its copy moves; the next chapter slides over it ——— */
+.chapter { position: relative; }
+.chapter .stage { position: sticky; top: 0; height: 100svh; overflow: hidden; }
+.chapter .title { font-weight: 290; letter-spacing: -0.045em; line-height: 0.86; font-variation-settings: "opsz" 144; }
+.side .what { font-size: clamp(1.15rem, 1.45vw, 1.34rem); line-height: 1.5; margin-bottom: 1rem; }
+.side .where { color: var(--ivory-2); font-size: 1.02rem; }
+.actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.7rem; }
+
+/* film: the game itself, full bleed */
+.film { height: 175vh; }
+.film .stage { background: #08090f; }
+.film .bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform: scale(calc(1.16 - var(--p, 0) * 0.16)); }
+.film .shade {
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(0deg, rgba(9, 10, 22, 0.94) 0%, rgba(9, 10, 22, 0.55) 34%, rgba(9, 10, 22, 0.06) 66%),
+    linear-gradient(180deg, rgba(9, 10, 22, 0.55) 0%, transparent 22%);
+}
+.film .copy { position: absolute; left: 0; right: 0; bottom: 0; padding-bottom: clamp(2.4rem, 7vh, 5rem); display: grid; grid-template-columns: minmax(0, 1fr) minmax(18rem, 29rem); align-items: end; gap: 1.5rem 4rem; }
+.film .title { font-size: clamp(4rem, 13.5vw, 15rem); transform: translateY(calc((1 - var(--p, 0)) * 9vh)); }
+.film .side { transform: translateY(calc((1 - var(--p, 0)) * 5vh)); opacity: calc(0.25 + var(--p, 0) * 2); }
+.lavaspin .copy { grid-template-columns: minmax(18rem, 29rem) minmax(0, 1fr); }
+.lavaspin .title { order: 2; text-align: right; }
+.lavaspin .shade {
+  background:
+    linear-gradient(0deg, rgba(14, 6, 4, 0.94) 0%, rgba(14, 6, 4, 0.5) 36%, rgba(14, 6, 4, 0.05) 66%),
+    linear-gradient(180deg, rgba(14, 6, 4, 0.5) 0%, transparent 22%);
+}
+.streetball .stage { background: #170d1c; }
+.lavaspin .stage { background: #120604; }
+
+/* showcase: the phone game, its pieces floating out of the screen */
+.showcase { height: 210vh; }
+.vanity .stage { background: radial-gradient(70% 85% at 70% 48%, #6f3549 0%, #3e2030 48%, #1b1016 100%); }
+.sundae .stage { background: radial-gradient(70% 85% at 30% 48%, #2b6a5f 0%, #15342f 50%, #0b1716 100%); }
+.scene { position: absolute; inset: 0; }
+.float {
+  position: absolute; left: var(--x); top: var(--y); width: var(--w); height: auto;
+  transform: translate3d(calc(var(--mx, 0) * var(--d) * -22px), calc((0.5 - var(--p, 0)) * var(--d) * 44vh), 0) rotate(calc(var(--r) + (var(--p, 0) - 0.5) * var(--d) * 26deg));
+  filter: drop-shadow(0 26px 34px rgba(8, 4, 10, 0.4));
+  will-change: transform;
+}
+.device { position: absolute; top: 50%; left: 69%; transform: translate(-50%, calc(-50% + (1 - var(--p, 0)) * 16vh)) rotate(calc((1 - var(--p, 0)) * 5deg)); }
+.sundae .device { left: 25%; transform: translate(-50%, calc(-50% + (1 - var(--p, 0)) * 16vh)) rotate(calc((1 - var(--p, 0)) * -5deg)); }
+.device .phone { width: clamp(220px, 19vw, 320px); }
+.showcase .copy { position: absolute; inset: 0; display: flex; align-items: center; pointer-events: none; }
+.showcase .side { max-width: 29rem; pointer-events: auto; transform: translateY(calc((1 - var(--p, 0)) * 6vh)); }
+.sundae .side { margin-left: auto; }
+.showcase .title { font-size: clamp(3.6rem, 8.2vw, 9rem); margin-bottom: clamp(1.2rem, 3vh, 2rem); }
+
+/* ——— Studio and contact ——— */
+.studio { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(18rem, 33rem); gap: 2rem 5rem; align-items: start; padding-top: clamp(7rem, 17vw, 15rem); padding-bottom: clamp(4rem, 9vw, 8rem); }
+.studio-title { font-size: clamp(2.8rem, 6.4vw, 6.6rem); font-weight: 290; letter-spacing: -0.04em; line-height: 0.95; }
+.studio-body p { color: var(--ivory-2); font-size: clamp(1.08rem, 1.3vw, 1.2rem); line-height: 1.65; }
+.studio-body a { color: var(--ivory); }
+.contact { padding-bottom: clamp(5rem, 10vw, 9rem); }
+.contact-title { font-size: clamp(1.6rem, 2.6vw, 2.2rem); font-weight: 340; margin-bottom: 1rem; color: var(--ivory-2); }
+.mail {
+  font-family: var(--display); font-weight: 290; font-size: clamp(2.1rem, 7.4vw, 7rem); letter-spacing: -0.04em; line-height: 1.1;
+  text-decoration: none; font-variation-settings: "opsz" 144;
+  background: linear-gradient(currentColor, currentColor) 0 96% / 0 1.5px no-repeat; transition: background-size 0.8s var(--ease);
+  overflow-wrap: anywhere;
+}
+.mail:hover { background-size: 100% 1.5px; }
+
+/* ——— The tail ——— */
+.tail { position: absolute; left: 0; top: 0; width: 100%; z-index: 30; pointer-events: none; overflow: visible; }
+.tail .ribbon { fill: none; stroke: var(--ivory); stroke-opacity: 0.55; stroke-width: 1.3; stroke-linecap: round; }
+.tail .bow { transform-box: fill-box; transform-origin: center; transform: scale(0); transition: transform 0.9s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.tail .bow.on { transform: scale(1); }
+
+/* ——— Narrow screens ——— */
+@media (max-width: 860px) {
+  .flyer { left: 62%; top: 12%; }
+  .kettle { bottom: 30%; width: 92px; }
+  .sky-copy { bottom: 2.4rem; }
+  .games a { grid-template-columns: 1fr; gap: 0.3rem; }
+  .g-where { text-align: left; }
+  .film { height: 150vh; }
+  .film .copy { grid-template-columns: 1fr; }
+  .lavaspin .copy { grid-template-columns: 1fr; }
+  .lavaspin .title { order: 0; text-align: left; }
+  .film .title { font-size: clamp(3.6rem, 17vw, 6rem); }
+  .showcase { height: 190vh; }
+  .wordmark { font-size: 21.5vw; }
+  .device { top: 26%; left: 50%; }
+  .sundae .device { left: 50%; }
+  .device .phone { width: min(39vw, 176px); padding: 7px; border-radius: 34px; }
+  .device .phone video { border-radius: 27px; }
+  .device .phone::before { top: 13px; height: 14px; }
+  .showcase .side .where { font-size: 0.95rem; }
+  .float { width: calc(var(--w) * 1.7); opacity: 0.85; }
+  .showcase .copy { align-items: flex-end; padding-bottom: 2.4rem; background: linear-gradient(0deg, rgba(10, 6, 10, 0.9) 0%, rgba(10, 6, 10, 0.55) 30%, transparent 52%); }
+  .sundae .copy { background: linear-gradient(0deg, rgba(5, 14, 13, 0.9) 0%, rgba(5, 14, 13, 0.55) 30%, transparent 52%); }
+  .sundae .side { margin-left: 0; }
+  .showcase .title { font-size: clamp(3rem, 13vw, 4.6rem); }
+  .studio { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .float, .device, .film .bg, .film .title, .film .side, .showcase .side { transform: none !important; }
+  .film .side { opacity: 1; }
+}

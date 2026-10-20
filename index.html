@@ -2,137 +2,209 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Kettlekite</title>
-<meta name="description" content="Small, cosy games for the time it takes a kettle to boil. Puzzles and kids' apps by independent developer Mert Can Gözükara.">
-<meta name="theme-color" content="#171b38">
+<meta name="description" content="Kettlekite is an independent game studio. Streetball, LavaSpin, Vanity Jam and Sundae Jam, each made start to finish by one person.">
+<meta name="theme-color" content="#0d0f22">
+<meta property="og:title" content="Kettlekite">
+<meta property="og:description" content="An independent game studio. Four games so far, each made start to finish by one person.">
+<meta property="og:image" content="https://kettlekite.com/assets/media/og.jpg">
+<meta property="og:url" content="https://kettlekite.com">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/assets/kite.svg" type="image/svg+xml">
+<script>document.documentElement.classList.add("js")</script>
 <link rel="preload" href="/assets/fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/fonts/fonts.css">
 <link rel="stylesheet" href="/assets/kk.css">
-<style>
-  .studio-hero h1 { font-size: clamp(3.6rem, 11vw, 7.5rem); line-height: 0.95; margin-bottom: 1.4rem; font-variation-settings: "opsz" 144; }
-  .scene { width: min(100%, 460px); height: auto; }
-  .scene .kite { transform-box: view-box; transform-origin: 340px 206px; animation: sway 7s ease-in-out infinite; }
-  @keyframes sway { 0%, 100% { transform: rotate(-5deg); } 50% { transform: rotate(6deg); } }
-  .games > * { max-width: 52rem; }
-  .games h2 { margin-bottom: 1.4rem; }
-  .more { margin-top: 1.1rem; }
-</style>
+<link rel="stylesheet" href="/assets/home.css">
 </head>
-<body>
-<header class="wrap bar">
-  <a class="brand" href="/">Kettlekite</a>
+<body class="home">
+<header class="bar">
+  <a class="brand" href="/" aria-label="Kettlekite, home">
+    <svg class="kite" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 3 L56 26 L32 61 Z" fill="#5fa59a"/><path d="M32 3 L8 26 L32 61 Z" fill="#f0a92e"/><path d="M32 3 V61 M8 26 H56" stroke="#2e2621" stroke-width="2.5" stroke-linecap="round" opacity=".55"/></svg>
+    Kettlekite
+  </a>
   <nav class="nav" aria-label="Site">
     <a href="#games">Games</a>
-    <a href="#parents">For parents</a>
+    <a href="#studio">Studio</a>
     <a href="#contact">Contact</a>
   </nav>
 </header>
 
 <main>
-  <section class="wrap hero studio-hero">
-    <div>
-      <h1>Kettlekite</h1>
-      <p class="lede">Small, cosy games for the time it takes a kettle to boil.</p>
-      <div class="actions">
-        <a class="pill" href="#games">See the games</a>
-        <a href="mailto:support@kettlekite.com">support@kettlekite.com</a>
-      </div>
-    </div>
-    <div class="stage">
-      <svg class="scene" viewBox="0 0 480 540" role="img" aria-label="A kettle on a windowsill. Its steam curls out of the window and becomes the string of a kite flying in the dusk sky.">
+  <!-- The sky: a kite on a long string from a kettle on the sill. Its tail streams down the whole page. -->
+  <section class="sky" id="top">
+    <div class="sky-glow" aria-hidden="true"></div>
+    <svg class="stars" aria-hidden="true"></svg>
+    <svg class="string" aria-hidden="true"><path/></svg>
+    <div class="flyer" aria-hidden="true">
+      <svg class="kite-big" viewBox="0 0 120 150">
         <defs>
-          <radialGradient id="horizon" cx="50%" cy="100%" r="75%">
-            <stop offset="0" stop-color="#e9a06b" stop-opacity=".55"/>
-            <stop offset=".55" stop-color="#9a6a7c" stop-opacity=".18"/>
-            <stop offset="1" stop-color="#222650" stop-opacity="0"/>
-          </radialGradient>
-          <radialGradient id="warm" cx="50%" cy="50%" r="50%">
-            <stop offset="0" stop-color="#f2c46b" stop-opacity=".35"/>
-            <stop offset="1" stop-color="#f2c46b" stop-opacity="0"/>
-          </radialGradient>
-          <clipPath id="pane"><path d="M62 520 V220 A178 178 0 0 1 418 220 V520 Z"/></clipPath>
+          <linearGradient id="sheen-l" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffc864"/><stop offset="1" stop-color="#e2911c"/></linearGradient>
+          <linearGradient id="sheen-r" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7cc2b5"/><stop offset="1" stop-color="#3f8b80"/></linearGradient>
         </defs>
-        <!-- the window and the sky in it -->
-        <g clip-path="url(#pane)">
-          <rect x="0" y="0" width="480" height="540" fill="url(#horizon)"/>
-          <circle cx="132" cy="150" r="2" fill="#f4ebdd" opacity=".7"/>
-          <circle cx="206" cy="96" r="1.6" fill="#f4ebdd" opacity=".55"/>
-          <circle cx="388" cy="262" r="1.8" fill="#f2c46b" opacity=".8"/>
-          <circle cx="98" cy="300" r="1.4" fill="#f4ebdd" opacity=".5"/>
-          <circle cx="252" cy="200" r="1.2" fill="#f4ebdd" opacity=".45"/>
-        </g>
-        <path d="M62 520 V220 A178 178 0 0 1 418 220 V520" fill="none" stroke="#f4ebdd" stroke-opacity=".22" stroke-width="3"/>
-        <path d="M240 42 V520" stroke="#f4ebdd" stroke-opacity=".1" stroke-width="2"/>
-        <!-- steam that becomes the kite string -->
-        <path d="M273 418 C258 390 296 372 284 340" fill="none" stroke="#f4ebdd" stroke-opacity=".75" stroke-width="2.6" stroke-linecap="round" stroke-dasharray="1 8"/>
-        <path d="M284 340 C272 308 322 300 326 262 C329 238 336 222 340 206" fill="none" stroke="#f4ebdd" stroke-opacity=".85" stroke-width="1.6" stroke-linecap="round"/>
-        <g class="kite">
-          <path d="M340 90 L376 140 L340 206 Z" fill="#7fc8bd"/>
-          <path d="M340 90 L304 140 L340 206 Z" fill="#f2c46b"/>
-          <path d="M340 90 V206 M304 140 H376" stroke="#171b38" stroke-opacity=".45" stroke-width="1.6" stroke-linecap="round"/>
-          <path d="M340 206 C334 228 356 238 348 262 C342 280 356 292 350 314" fill="none" stroke="#f4ebdd" stroke-opacity=".8" stroke-width="1.6" stroke-linecap="round"/>
-          <path d="M346 236 l-11 -6 l1 12 Z M346 236 l11 -6 l-1 12 Z" fill="#f2c46b"/>
-          <path d="M349 276 l-11 -6 l1 12 Z M349 276 l11 -6 l-1 12 Z" fill="#7fc8bd"/>
-        </g>
-        <!-- the sill and the kettle -->
-        <ellipse cx="170" cy="470" rx="120" ry="70" fill="url(#warm)"/>
-        <rect x="34" y="500" width="412" height="16" rx="8" fill="#f4ebdd" fill-opacity=".14"/>
-        <path d="M136 426 C136 372 204 372 204 426" fill="none" stroke="#f4ebdd" stroke-opacity=".85" stroke-width="8" stroke-linecap="round"/>
-        <path d="M226 466 C246 458 258 440 268 420 L279 426 C269 452 255 474 232 486 Z" fill="#5fa59a"/>
-        <path d="M108 500 C102 450 122 422 170 422 C218 422 238 450 232 500 Z" fill="#7fc8bd"/>
-        <path d="M122 474 C126 450 140 438 160 434" fill="none" stroke="#f4ebdd" stroke-opacity=".5" stroke-width="6" stroke-linecap="round"/>
-        <ellipse cx="170" cy="423" rx="42" ry="8.5" fill="#5fa59a"/>
-        <circle cx="170" cy="410" r="8" fill="#f2c46b"/>
+        <path d="M60 4 L104 52 L60 146 Z" fill="url(#sheen-r)"/>
+        <path d="M60 4 L16 52 L60 146 Z" fill="url(#sheen-l)"/>
+        <path d="M60 4 V146 M16 52 H104" stroke="#2e2621" stroke-width="2.6" stroke-linecap="round" opacity=".5"/>
+        <path d="M60 4 L104 52 L60 146 L16 52 Z" fill="none" stroke="#fff3dc" stroke-opacity=".35" stroke-width="1.2"/>
       </svg>
     </div>
+    <div class="kettle" aria-hidden="true">
+      <svg viewBox="0 0 220 170">
+        <g class="steam" fill="none" stroke="#f4ebdd" stroke-linecap="round">
+          <path d="M176 70 C166 50 190 40 180 18" stroke-width="3" stroke-dasharray="1 9"/>
+          <path d="M184 76 C198 58 176 44 192 26" stroke-width="2.4" stroke-dasharray="1 10"/>
+        </g>
+        <path d="M70 70 C70 30 132 30 132 70" fill="none" stroke="#f4ebdd" stroke-opacity=".85" stroke-width="7" stroke-linecap="round"/>
+        <path d="M150 112 C166 104 176 90 183 74 L192 79 C184 100 172 118 154 128 Z" fill="#4f9184"/>
+        <path d="M44 150 C38 102 58 70 101 70 C144 70 162 102 156 150 Z" fill="#6fb6aa"/>
+        <path d="M58 126 C62 102 76 90 94 86" fill="none" stroke="#f4ebdd" stroke-opacity=".45" stroke-width="6" stroke-linecap="round"/>
+        <ellipse cx="101" cy="71" rx="37" ry="7.5" fill="#4f9184"/>
+        <circle cx="101" cy="60" r="7" fill="#f0a92e"/>
+        <rect x="20" y="150" width="180" height="10" rx="5" fill="#f4ebdd" fill-opacity=".12"/>
+      </svg>
+    </div>
+    <div class="sky-copy wrap">
+      <h1 class="wordmark" aria-label="Kettlekite"><span aria-hidden="true">K</span><span aria-hidden="true">e</span><span aria-hidden="true">t</span><span aria-hidden="true">t</span><span aria-hidden="true">l</span><span aria-hidden="true">e</span><span aria-hidden="true">k</span><span aria-hidden="true">i</span><span aria-hidden="true">t</span><span aria-hidden="true">e</span></h1>
+      <p class="lede">An independent game studio. Four games so far, each made start to finish by one person.</p>
+    </div>
   </section>
 
-  <section class="wrap section games" id="games">
-    <h2>Games</h2>
-    <ul class="rows">
-      <li class="row">
-        <a href="https://vanityjam.kettlekite.com">
-          <img src="/assets/icons/vanity-jam.png" alt="" width="60" height="60">
-          <span><span class="name">Vanity Jam</span><span class="year">2026</span>
-            <span class="what">Tidy the messiest makeup drawer: a calm 3D sorting puzzle for iPhone.</span></span>
-          <span class="end"><span class="chip soon">Coming soon</span><span class="go" aria-hidden="true">↗</span></span>
-        </a>
-      </li>
-      <li class="row">
-        <a href="https://sundaejam.kettlekite.com">
-          <img src="/assets/icons/sundae-jam.png" alt="" width="60" height="60">
-          <span><span class="name">Sundae Jam</span><span class="year">2026</span>
-            <span class="what">Clear a jammed dessert counter and fill every sundae bowl before the tray runs out.</span></span>
-          <span class="end"><span class="chip soon">Coming soon</span><span class="go" aria-hidden="true">↗</span></span>
-        </a>
-      </li>
+  <!-- Index: every game, one line each. Hover shows a frame of it; a click goes to its chapter. -->
+  <section class="index wrap" id="games" aria-labelledby="games-title">
+    <h2 class="sr" id="games-title">Games</h2>
+    <ul class="games">
+      <li><a href="#streetball" data-preview="/assets/media/streetball/poster.jpg">
+        <span class="g-name">Streetball</span><span class="g-what">Online 3v3 street football</span><span class="g-where">Mac, Windows, browser</span></a></li>
+      <li><a href="#lavaspin" data-preview="/assets/media/lavaspin/poster.jpg">
+        <span class="g-name">LavaSpin</span><span class="g-what">Party sumo on a magma orb</span><span class="g-where">Mac, Windows, browser</span></a></li>
+      <li><a href="#vanity-jam" data-preview="/assets/media/vanity-jam/shot.jpg">
+        <span class="g-name">Vanity Jam</span><span class="g-what">A makeup drawer to tidy, in 3D</span><span class="g-where">iPhone, coming soon</span></a></li>
+      <li><a href="#sundae-jam" data-preview="/assets/media/sundae-jam/shot.jpg">
+        <span class="g-name">Sundae Jam</span><span class="g-what">A dessert counter to clear</span><span class="g-where">iPhone, coming soon</span></a></li>
     </ul>
-    <p class="quiet more">More small games are on the way.</p>
+    <figure class="peek" aria-hidden="true"><img alt=""></figure>
   </section>
 
-  <section class="wrap section split" id="parents">
-    <h2>For parents</h2>
-    <div class="body">
-      <p>Every Kettlekite game has its own privacy page that says exactly what it collects. <strong>Vanity Jam and Sundae Jam ask for no account and have no ads or analytics.</strong></p>
-      <p>This website sets no cookies and loads nothing from other companies.</p>
+  <section class="chapter film streetball" id="streetball" aria-labelledby="sb-title">
+    <div class="stage">
+      <video class="bg" muted loop playsinline preload="none" poster="/assets/media/streetball/poster.jpg"
+        data-src="/assets/media/streetball/loop.mp4" data-src-small="/assets/media/streetball/loop-small.mp4"></video>
+      <div class="shade"></div>
+      <div class="copy wrap">
+        <h2 class="title" id="sb-title">Streetball</h2>
+        <div class="side">
+          <p class="what">Fast three-a-side football in a caged court at sunset. Walls stay in play, passes are quick and every tackle counts, against the computer or friends online.</p>
+          <p class="where">Free on Mac and Windows, and playable right in the browser. In beta.</p>
+          <div class="actions">
+            <a class="btn solid" href="https://mertgozukara.com/games/streetball">Play in the browser</a>
+            <a class="btn line" href="https://iammertg.itch.io/streetball">Download on itch.io</a>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
-  <section class="wrap section split" id="contact">
-    <h2>Say hello</h2>
-    <div class="body">
-      <p>Questions, bugs or ideas: <a href="mailto:support@kettlekite.com">support@kettlekite.com</a>. One person reads every message.</p>
+  <section class="chapter film lavaspin" id="lavaspin" aria-labelledby="ls-title">
+    <div class="stage">
+      <video class="bg" muted loop playsinline preload="none" poster="/assets/media/lavaspin/poster.jpg"
+        data-src="/assets/media/lavaspin/loop.mp4" data-src-small="/assets/media/lavaspin/loop-small.mp4"></video>
+      <div class="shade"></div>
+      <div class="copy wrap">
+        <h2 class="title" id="ls-title">LavaSpin</h2>
+        <div class="side">
+          <p class="what">Party sumo on a magma orb. Two to four players shove, dash and slide each other into the lava, while the island shrinks under their feet.</p>
+          <p class="where">Free on Mac and Windows, and in the browser. One keyboard, gamepads, or online with a room code.</p>
+          <div class="actions">
+            <a class="btn solid" href="https://mertgozukara.com/games/lavaspin">Play in the browser</a>
+            <a class="btn line" href="https://iammertg.itch.io/lavaspin">Download on itch.io</a>
+          </div>
+        </div>
+      </div>
     </div>
+  </section>
+
+  <section class="chapter showcase vanity" id="vanity-jam" aria-labelledby="vj-title">
+    <div class="stage">
+      <div class="scene" aria-hidden="true">
+        <img class="float" src="/assets/media/vanity-jam/lipstick_pink.webp" alt="" style="--x:58%;--y:10%;--w:6%;--d:1.4;--r:-14deg">
+        <img class="float" src="/assets/media/vanity-jam/compact_pink.webp" alt="" style="--x:80%;--y:6%;--w:12%;--d:0.7;--r:12deg">
+        <img class="float" src="/assets/media/vanity-jam/palette_pink.webp" alt="" style="--x:86%;--y:44%;--w:15%;--d:1.1;--r:-8deg">
+        <img class="float" src="/assets/media/vanity-jam/dryer_lavender.webp" alt="" style="--x:44%;--y:58%;--w:15%;--d:0.9;--r:16deg">
+        <img class="float" src="/assets/media/vanity-jam/jar_sage.webp" alt="" style="--x:78%;--y:76%;--w:11%;--d:1.5;--r:6deg">
+        <img class="float" src="/assets/media/vanity-jam/gloss_coral.webp" alt="" style="--x:52%;--y:30%;--w:3.4%;--d:0.5;--r:24deg">
+        <img class="float" src="/assets/media/vanity-jam/scrunchie_butter.webp" alt="" style="--x:93%;--y:20%;--w:8%;--d:1.8;--r:-20deg">
+        <img class="float" src="/assets/media/vanity-jam/brush_peach.webp" alt="" style="--x:60%;--y:84%;--w:5%;--d:1.2;--r:-36deg">
+      </div>
+      <div class="device"><div class="phone"><video muted loop playsinline preload="none" poster="/assets/media/vanity-jam/shot.jpg" data-src="/assets/media/vanity-jam/demo.mp4"></video></div></div>
+      <div class="copy wrap">
+        <div class="side">
+          <h2 class="title" id="vj-title">Vanity Jam</h2>
+          <p class="what">The messiest makeup drawer, tidied one tap at a time. Every lipstick, brush and palette flies to its box, and anything lying on top has to go first.</p>
+          <p class="where">A calm 3D puzzle for iPhone, two hundred levels, every one solvable. Coming soon to the App Store.</p>
+          <div class="actions">
+            <a class="btn line" href="https://vanityjam.kettlekite.com">Visit Vanity Jam</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="chapter showcase sundae" id="sundae-jam" aria-labelledby="sj-title">
+    <div class="stage">
+      <div class="scene" aria-hidden="true">
+        <img class="float" src="/assets/media/sundae-jam/sundae.webp" alt="" style="--x:6%;--y:8%;--w:14%;--d:0.8;--r:-6deg">
+        <img class="float" src="/assets/media/sundae-jam/cherry.webp" alt="" style="--x:38%;--y:6%;--w:7%;--d:1.6;--r:12deg">
+        <img class="float" src="/assets/media/sundae-jam/scoop_strawberry.webp" alt="" style="--x:4%;--y:56%;--w:12%;--d:1.2;--r:8deg">
+        <img class="float" src="/assets/media/sundae-jam/scoop_pistachio.webp" alt="" style="--x:40%;--y:62%;--w:11%;--d:0.6;--r:-10deg">
+        <img class="float" src="/assets/media/sundae-jam/waferroll.webp" alt="" style="--x:16%;--y:34%;--w:13%;--d:1.4;--r:-24deg">
+        <img class="float" src="/assets/media/sundae-jam/scoop_blueberry.webp" alt="" style="--x:30%;--y:84%;--w:9%;--d:1.8;--r:14deg">
+        <img class="float" src="/assets/media/sundae-jam/waffle.webp" alt="" style="--x:-2%;--y:82%;--w:12%;--d:0.9;--r:18deg">
+        <img class="float" src="/assets/media/sundae-jam/brownie.webp" alt="" style="--x:44%;--y:32%;--w:8%;--d:1.1;--r:-14deg">
+      </div>
+      <div class="device"><div class="phone"><video muted loop playsinline preload="none" poster="/assets/media/sundae-jam/shot.jpg" data-src="/assets/media/sundae-jam/demo.mp4"></video></div></div>
+      <div class="copy wrap">
+        <div class="side">
+          <h2 class="title" id="sj-title">Sundae Jam</h2>
+          <p class="what">A dessert counter jammed with scoops, wafers and waffles. Tap one with a clear way out and it slides into the glass that wants its flavour.</p>
+          <p class="where">A 3D puzzle for iPhone with frozen desserts, padlocks and turntables, two hundred levels in all. Coming soon to the App Store.</p>
+          <div class="actions">
+            <a class="btn line" href="https://sundaejam.kettlekite.com">Visit Sundae Jam</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="studio wrap" id="studio" aria-labelledby="studio-title">
+    <h2 class="studio-title rise" id="studio-title">One person, every part of the game.</h2>
+    <div class="studio-body rise">
+      <p>Kettlekite is the studio of Mert Can Gözükara, an independent developer in Leipzig. Each game is designed, coded, modelled, lit and shipped by the same pair of hands, from the first sketch to the store page.</p>
+      <p>The desktop games are free on itch.io and play in the browser. The iPhone games come with no account, no ads and no tracking.</p>
+      <p><a href="https://mertgozukara.com">More of my work at mertgozukara.com</a></p>
+    </div>
+  </section>
+
+  <section class="contact wrap" id="contact" aria-labelledby="contact-title">
+    <h2 class="contact-title rise" id="contact-title">Say hello</h2>
+    <p class="rise"><a class="mail" href="mailto:support@kettlekite.com">support@kettlekite.com</a></p>
+    <p class="quiet rise">Questions, bugs or ideas. One person reads every message.</p>
   </section>
 </main>
 
 <footer class="foot">
   <div class="wrap">
-    <p>Kettlekite is the studio name of independent developer <a href="https://mertgozukara.com">Mert Can Gözükara</a>.</p>
-    <p>© 2026 Mert Can Gözükara</p>
+    <p>© 2026 Mert Can Gözükara. This site sets no cookies and loads nothing from other companies.</p>
+    <ul>
+      <li><a href="https://vanityjam.kettlekite.com/privacy">Vanity Jam privacy</a></li>
+      <li><a href="https://sundaejam.kettlekite.com/privacy">Sundae Jam privacy</a></li>
+      <li><a href="https://iammertg.itch.io">itch.io</a></li>
+    </ul>
   </div>
 </footer>
+
+<!-- The kite's tail: a ribbon from the kite down into the list of games, a bow beside each one. Drawn by home.js. -->
+<svg class="tail" aria-hidden="true"><path class="ribbon"/><g class="bows"></g></svg>
+<script src="/assets/home.js" defer></script>
 </body>
 </html>
