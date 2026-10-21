@@ -52,7 +52,9 @@
     string.parentNode.setAttribute("viewBox", `0 0 ${w} ${h}`);
     const [kx, ky] = tip(), [sx, sy] = spout();
     // the string sags between the spout and the kite, bellied away from the wind
-    string.setAttribute("d", `M${sx} ${sy} C ${sx - w * 0.02} ${sy - h * 0.3}, ${kx + w * 0.07} ${ky + h * 0.26}, ${kx} ${ky}`);
+    // the handles never reach past the kite, or a kite close above the kettle makes the string hook
+    const rise = Math.max(0, sy - ky);
+    string.setAttribute("d", `M${sx} ${sy} C ${sx - w * 0.02} ${sy - Math.min(h * 0.3, rise * 0.45)}, ${kx + w * 0.07} ${ky + Math.min(h * 0.26, rise * 0.4)}, ${kx} ${ky}`);
     string.style.setProperty("--len", string.getTotalLength().toFixed(0));
   }
 
@@ -137,18 +139,23 @@
     for (const b of bows.children) b.classList.toggle("on", +b.dataset.y < reach);
   }
 
-  // chapter motion: --p runs 0 → 1 while a chapter rises into view, --x 0 → 1 while it leaves
+  // chapter motion: --p runs 0 → 1 while a chapter rises into view, --x 0 → 1 while it leaves.
+  // Only the chapter filling most of the screen plays its video: with two playing videos on screen,
+  // Chrome on a Mac drops the whole page to 30 fps, which is just when one chapter slides over another.
   function chapterMotion() {
+    let lead = null, most = 0;
+    const near = new Map();
     for (const c of chapters) {
       const r = c.getBoundingClientRect();
       const p = Math.min(1, Math.max(0, 1 - r.top / vh));
       const x = Math.min(1, Math.max(0, -r.top / vh));
       c.style.setProperty("--p", p.toFixed(4));
       c.style.setProperty("--x", x.toFixed(4));
-      const near = r.top < vh * 2 && r.bottom > -vh;
-      const visible = r.top < vh && r.bottom > 0;
-      for (const v of c.querySelectorAll("video")) video(v, near, visible);
+      near.set(c, r.top < vh * 2 && r.bottom > -vh);
+      const shown = Math.min(r.bottom, vh) - Math.max(r.top, 0);
+      if (shown > most) { most = shown; lead = c; }
     }
+    for (const c of chapters) for (const v of c.querySelectorAll("video")) video(v, near.get(c), c === lead);
   }
 
   // AV1 holds the film chapters' detail at a fraction of the size, but only where the hardware

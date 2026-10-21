@@ -3,13 +3,13 @@
 /* ——— The sky ——— */
 .sky {
   position: relative; height: 100svh; min-height: 620px; overflow: hidden; isolation: isolate;
-  background: linear-gradient(180deg, #090b1b 0%, #12163a 34%, #23255a 60%, #463459 80%, #6e4553 100%);
+  background: linear-gradient(180deg, #090b1b 0%, #12163a 38%, #23255a 66%, #3a3060 100%);
 }
 .sky-glow {
-  position: absolute; left: -20%; right: -20%; bottom: -34%; height: 80%; z-index: -1;
-  background: radial-gradient(48% 58% at 64% 100%, rgba(240, 165, 108, 0.62), rgba(170, 108, 120, 0.2) 52%, transparent 76%);
+  position: absolute; left: -20%; right: -20%; bottom: -10%; height: 70%; z-index: -1;
+  background: radial-gradient(50% 50% at 55% 100%, rgba(240, 165, 108, 0.32), rgba(120, 96, 150, 0.14) 50%, transparent 76%);
 }
-.stars { position: absolute; inset: 0 0 30% 0; width: 100%; height: 70%; }
+.stars { position: absolute; inset: 0 0 42% 0; width: 100%; height: 58%; }
 .stars circle { fill: var(--ivory); }
 .stars .tw { animation: twinkle 4.5s ease-in-out infinite; }
 @keyframes twinkle { 0%, 100% { opacity: 0.25; } 50% { opacity: 0.95; } }
@@ -38,15 +38,28 @@
 .kite-big { width: 100%; height: auto; transform-origin: 50% 97%; animation: sway 7.5s ease-in-out infinite; filter: drop-shadow(0 18px 30px rgba(10, 8, 30, 0.45)); }
 @keyframes sway { 0%, 100% { transform: rotate(-4deg); } 50% { transform: rotate(5deg); } }
 
-.kettle { position: absolute; right: calc(var(--gutter) + 1vw); bottom: 6%; width: clamp(104px, 11vw, 180px); }
+/* the kettle sits on the roof at the city's right edge (city.js puts that roof at 62% of its height) */
+.kettle { position: absolute; z-index: 2; right: 4%; bottom: calc(var(--city) * 0.62); width: clamp(84px, 8vw, 140px); }
 .kettle::before { content: ""; position: absolute; inset: 30% -40% -20% -40%; background: radial-gradient(closest-side, rgba(242, 196, 107, 0.32), transparent); z-index: -1; }
 .kettle svg { width: 100%; height: auto; }
 .steam path { animation: steam 3.2s linear infinite; stroke-opacity: 0.7; }
 .steam path + path { animation-duration: 4.1s; }
 @keyframes steam { to { stroke-dashoffset: -40; } }
 
-.sky-copy { position: absolute; left: 0; right: 0; bottom: clamp(2rem, 7vh, 5rem); pointer-events: none; }
-.wordmark { font-weight: 290; font-size: clamp(4.4rem, 18.6vw, 21rem); line-height: 0.82; letter-spacing: -0.048em; margin-left: -0.045em; white-space: nowrap; }
+/* the night city along the bottom of the sky; its billboards play the games */
+.sky { --city: 46%; }
+.city { position: absolute; left: 0; right: 0; bottom: 0; height: var(--city); z-index: 1; }
+.city svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.city .front { pointer-events: none; }
+.board { position: absolute; display: block; background: #0b0d1f center / cover no-repeat; }
+.board canvas { display: block; width: 100%; height: 100%; }
+/* the videos play unseen; city.js draws their frames into the canvas (see there why) */
+.board video { position: absolute; inset: 0; width: 100%; height: 100%; visibility: hidden; }
+.beacon { animation: beacon 2.8s ease-in-out infinite; }
+@keyframes beacon { 0%, 100% { opacity: 0.15; } 50% { opacity: 1; } }
+
+.sky-copy { position: absolute; left: 0; right: 0; top: clamp(5.5rem, 17vh, 10rem); pointer-events: none; }
+.wordmark { font-weight: 290; font-size: clamp(3.4rem, 11vw, 12.5rem); line-height: 0.82; letter-spacing: -0.048em; margin-left: -0.045em; white-space: nowrap; }
 .wordmark span { display: inline-block; }
 .lede { max-width: 31ch; margin: clamp(1rem, 2.4vh, 1.8rem) 0 0; font-size: clamp(1.1rem, 1.55vw, 1.38rem); line-height: 1.5; color: var(--ivory-2); }
 
@@ -170,15 +183,15 @@ html:has(body.home) { scroll-snap-type: y mandatory; }
 /* ——— Narrow screens ——— */
 @media (max-width: 860px) {
   .flyer { left: 62%; top: 12%; }
-  .kettle { bottom: 30%; width: 92px; }
-  .sky-copy { bottom: 2.4rem; }
+  .sky { --city: 40%; }
+  .kettle { right: 2%; width: 58px; }
   .games a { grid-template-columns: 1fr; gap: 0.3rem; }
   .g-where { text-align: left; }
   .film .copy { grid-template-columns: 1fr; }
   .lavaspin .copy { grid-template-columns: 1fr; }
   .lavaspin .title { order: 0; text-align: left; }
   .film .title { font-size: clamp(3.6rem, 17vw, 6rem); }
-  .wordmark { font-size: 21.5vw; }
+  .wordmark { font-size: 15vw; }
   .device { top: 26%; left: 50%; }
   .sundae .device { left: 50%; }
   .device .phone { width: min(39vw, 176px); padding: 7px; border-radius: 34px; }

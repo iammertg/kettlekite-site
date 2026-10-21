@@ -32,7 +32,7 @@
 </header>
 
 <main>
-  <!-- The sky: a kite on a long string from a kettle on the sill. Its tail streams down the whole page. -->
+  <!-- The sky: a kite on a long string from a kettle on a rooftop, over a city where the games play. Its tail streams down the whole page. -->
   <section class="sky" id="top">
     <div class="sky-glow" aria-hidden="true"></div>
     <svg class="stars" aria-hidden="true"></svg>
@@ -64,6 +64,15 @@
         <circle cx="101" cy="60" r="7" fill="#f0a92e"/>
         <rect x="20" y="150" width="180" height="10" rx="5" fill="#f4ebdd" fill-opacity=".12"/>
       </svg>
+    </div>
+    <!-- A night city under the sky; the games play on billboards on its rooftops. Laid out by city.js. -->
+    <div class="city" aria-hidden="true">
+      <svg class="back"></svg>
+      <a class="board" data-game="streetball" href="#streetball" tabindex="-1" style="background-image:url(/assets/media/streetball/peek.jpg)"><canvas></canvas><video src="/assets/media/streetball/hero.mp4" muted loop playsinline preload="auto"></video></a>
+      <a class="board" data-game="vanity" href="#vanity-jam" tabindex="-1" style="background-image:url(/assets/media/vanity-jam/shot.jpg)"><canvas></canvas><video src="/assets/media/vanity-jam/demo.mp4" muted loop playsinline preload="auto"></video></a>
+      <a class="board" data-game="lavaspin" href="#lavaspin" tabindex="-1" style="background-image:url(/assets/media/lavaspin/peek.jpg)"><canvas></canvas><video src="/assets/media/lavaspin/hero.mp4" muted loop playsinline preload="auto"></video></a>
+      <a class="board" data-game="sundae" href="#sundae-jam" tabindex="-1" style="background-image:url(/assets/media/sundae-jam/shot.jpg)"><canvas></canvas><video src="/assets/media/sundae-jam/demo.mp4" muted loop playsinline preload="auto"></video></a>
+      <svg class="front"></svg>
     </div>
     <div class="sky-copy wrap">
       <h1 class="wordmark" aria-label="Kettlekite"><span aria-hidden="true">K</span><span aria-hidden="true">e</span><span aria-hidden="true">t</span><span aria-hidden="true">t</span><span aria-hidden="true">l</span><span aria-hidden="true">e</span><span aria-hidden="true">k</span><span aria-hidden="true">i</span><span aria-hidden="true">t</span><span aria-hidden="true">e</span></h1>
@@ -205,6 +214,7 @@
 
 <!-- The kite's tail: a ribbon from the kite down into the list of games, a bow beside each one. Drawn by home.js. -->
 <svg class="tail" aria-hidden="true"><path class="ribbon"/><g class="bows"></g></svg>
+<script src="/assets/city.js" defer></script>
 <script src="/assets/home.js" defer></script>
 </body>
 </html>
