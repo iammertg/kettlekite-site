@@ -1,5 +1,5 @@
 // kettlekite.com: the night city under the sky. Blocks in three depths, their lit windows and rooftop
-// clutter, and the four games playing on billboards that stand on the rooftops.
+// clutter, and the five games playing on billboards that stand on the rooftops.
 (() => {
   const city = document.querySelector(".city");
   if (!city) return;
@@ -7,7 +7,7 @@
   const back = city.querySelector("svg.back");
   const front = city.querySelector("svg.front");
   const boards = Object.fromEntries([...city.querySelectorAll(".board")].map((a) => [a.dataset.game, a]));
-  const hue = { streetball: "#f2985a", lavaspin: "#ff5a2a", vanity: "#f2a0be", sundae: "#7fe0c8" };
+  const hue = { streetball: "#f2985a", lavaspin: "#ff5a2a", vanity: "#f2a0be", sundae: "#7fe0c8", crab: "#ff8a5c" };
   const el = (tag, attrs, parent) => {
     const e = document.createElementNS(NS, tag);
     for (const k in attrs) e.setAttribute(k, attrs[k]);
@@ -94,10 +94,11 @@
     // the billboards, each on its own roof: a cabinet on steel legs and braces, a catwalk with a
     // rail, and lamps on arms that throw soft light down the face
     const slots = narrow
-      ? { streetball: 0.16, vanity: 0.37, lavaspin: 0.56, sundae: 0.75 }
-      : { streetball: 0.19, vanity: 0.385, lavaspin: 0.56, sundae: 0.73 };
-    const wideW = narrow ? W * 0.3 : W * 0.2;
-    const tallW = narrow ? W * 0.11 : W * 0.05;
+      ? { streetball: 0.13, vanity: 0.31, lavaspin: 0.485, sundae: 0.66, crab: 0.765 }
+      : { streetball: 0.17, crab: 0.325, vanity: 0.425, lavaspin: 0.595, sundae: 0.77 };
+    // five boards and the kettle share a phone's width: a little smaller there
+    const wideW = narrow ? W * 0.26 : W * 0.2;
+    const tallW = narrow ? W * 0.1 : W * 0.05;
     function billboard(game, roofY, w, h) {
       const cx = W * slots[game];
       const host = w + (narrow ? 26 : 70) * u;
@@ -134,6 +135,7 @@
     billboard("lavaspin", H * 0.66, wideW * 0.92, (wideW * 0.92 * 9) / 16);
     billboard("vanity", H * 0.52, tallW, tallW * 2.05);
     billboard("sundae", H * 0.56, tallW, tallW * 2.05);
+    billboard("crab", H * 0.54, tallW, tallW * 2.05);
     // the kettle's roof at the right edge
     block(W * 0.88, W * 0.14, H * 0.38, "near", true);
   }

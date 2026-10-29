@@ -144,6 +144,7 @@ html:has(body.home) { scroll-snap-type: y mandatory; }
 /* showcase: the phone game, its pieces floating out of the screen */
 .vanity .stage { background: radial-gradient(70% 85% at 70% 48%, #6f3549 0%, #3e2030 48%, #1b1016 100%); }
 .sundae .stage { background: radial-gradient(70% 85% at 30% 48%, #2b6a5f 0%, #15342f 50%, #0b1716 100%); }
+.crab .stage { background: radial-gradient(70% 85% at 70% 48%, #1f5d70 0%, #123647 48%, #081620 100%); }
 .scene { position: absolute; inset: 0; }
 .float {
   position: absolute; left: var(--x); top: var(--y); width: var(--w); height: auto;
@@ -201,6 +202,7 @@ html:has(body.home) { scroll-snap-type: y mandatory; }
   .float { width: calc(var(--w) * 1.7); opacity: 0.85; }
   .showcase .copy { align-items: flex-end; padding-bottom: 2.4rem; background: linear-gradient(0deg, rgba(10, 6, 10, 0.9) 0%, rgba(10, 6, 10, 0.55) 30%, transparent 52%); }
   .sundae .copy { background: linear-gradient(0deg, rgba(5, 14, 13, 0.9) 0%, rgba(5, 14, 13, 0.55) 30%, transparent 52%); }
+  .crab .copy { background: linear-gradient(0deg, rgba(4, 12, 18, 0.9) 0%, rgba(4, 12, 18, 0.55) 30%, transparent 52%); }
   .sundae .side { margin-left: 0; }
   .showcase .title { font-size: clamp(3rem, 13vw, 4.6rem); }
   .studio { grid-template-columns: 1fr; }
