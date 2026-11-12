@@ -135,10 +135,9 @@ html:has(body.home) { scroll-snap-type: y mandatory; }
 .chapter .title { font-weight: 290; letter-spacing: -0.045em; line-height: 0.86; font-variation-settings: "opsz" 144; }
 .side .what { font-size: clamp(1.15rem, 1.45vw, 1.34rem); line-height: 1.5; margin-bottom: 1rem; }
 .side .where { color: var(--ivory-2); font-size: 1.02rem; }
-.actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.7rem; }
-/* Apple's own badge, unaltered, for a game that is out; it presses like the buttons beside it */
-.store-badge { display: inline-flex; border-radius: 9px; transition: transform 0.16s var(--ease); }
-.store-badge img { width: auto; height: 3rem; }
+.actions { margin-top: 1.7rem; }
+/* Apple's badge (shape in kk.css) presses like the buttons beside it */
+.store-badge { transition: transform 0.16s var(--ease); }
 .store-badge:active { transform: scale(0.97); }
 @media (hover: hover) and (pointer: fine) { .store-badge:hover { transform: translateY(-1px); } }
 
@@ -215,6 +214,8 @@ html:has(body.home) { scroll-snap-type: y mandatory; }
   .bar .brand, .nav a { padding-block: 0.65rem; margin-block: -0.65rem; }
   .foot ul { gap: 0 1.5rem; }
   .foot a { display: inline-block; padding-block: 0.7rem; }
+  /* a game's buttons fill their row, beside the badge or stacked, so the row ends on one edge */
+  .chapter .actions .btn { flex: 1 1 auto; }
 }
 /* the smallest phones: the bar keeps the kite mark and the links (the name stands just below it,
    in the sky), and the line wraps beside the kite instead of running under it */
