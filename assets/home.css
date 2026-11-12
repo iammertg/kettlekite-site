@@ -118,6 +118,11 @@ html:has(body.home) { scroll-snap-type: y mandatory; }
 .side .what { font-size: clamp(1.15rem, 1.45vw, 1.34rem); line-height: 1.5; margin-bottom: 1rem; }
 .side .where { color: var(--ivory-2); font-size: 1.02rem; }
 .actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.7rem; }
+/* Apple's own badge, unaltered, for a game that is out; it presses like the buttons beside it */
+.store-badge { display: inline-flex; border-radius: 9px; transition: transform 0.16s var(--ease); }
+.store-badge img { width: auto; height: 3rem; }
+.store-badge:active { transform: scale(0.97); }
+@media (hover: hover) and (pointer: fine) { .store-badge:hover { transform: translateY(-1px); } }
 
 /* film: the game itself, full bleed */
 .film .stage { background: #08090f; }
