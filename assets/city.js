@@ -22,7 +22,6 @@
     let seed = 23;
     const r = () => ((seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296);
     const u = Math.max(0.55, Math.min(1.25, W / 1440));
-    const narrow = W < 700;
     const defs = el("defs", {}, back);
     const fdefs = el("defs", {}, front);
     let gid = 0;
@@ -60,7 +59,7 @@
         el("circle", { cx: ax + 0.65 * u, cy: top - ah, r: 1.7 * u, fill: "#ff5a4a", class: "beacon", style: `animation-delay:${(-r() * 3).toFixed(2)}s` }, g);
       }
     }
-    function block(x, w, top, layer, bare = false) {
+    function block(x, w, top, layer, bare = false, clear = 0) {
       const g = el("g", {}, back);
       el("rect", { x, y: top, width: w, height: H - top + 2, fill: tone[layer] }, g);
       el("rect", { x: x - 1.5 * u, y: top - 2.5 * u, width: w + 3 * u, height: 2.5 * u, fill: layer === "far" ? "#1b2148" : "#181d3e" }, g);
@@ -69,7 +68,7 @@
       const op = { far: 0.32, mid: 0.55, near: 0.85 }[layer];
       const cols = Math.max(1, Math.floor((w - 8 * u) / cw));
       const x0 = x + (w - cols * cw) / 2 + (cw - ww) / 2;
-      for (let y = top + 10 * u; y < H - 6 * u; y += rh) {
+      for (let y = top + 10 * u + clear; y < H - 6 * u; y += rh) {
         for (let c = 0; c < cols; c++) {
           const v = r(), warm = r() > 0.25, a = 0.6 + r() * 0.4;
           if (v > lit) continue;
@@ -91,22 +90,45 @@
     el("rect", { x: 0, y: H * 0.35, width: W, height: H * 0.65, fill: linear([[0, "#2a2550", 0], [1, "#2a2550", 0.35]], defs) }, back);
     skyline("mid", 0.32, 0.72, 50, 130);
 
-    // the billboards, each on its own roof: a cabinet on steel legs and braces, a catwalk with a
-    // rail, and lamps on arms that throw soft light down the face
-    const slots = narrow
-      ? { streetball: 0.13, vanity: 0.31, lavaspin: 0.485, sundae: 0.66, crab: 0.765 }
-      : { streetball: 0.17, crab: 0.325, vanity: 0.425, lavaspin: 0.595, sundae: 0.77 };
-    // five boards and the kettle share a phone's width: a little smaller there
-    const wideW = narrow ? W * 0.26 : W * 0.2;
-    const tallW = narrow ? W * 0.1 : W * 0.05;
-    function billboard(game, roofY, w, h) {
-      const cx = W * slots[game];
-      const host = w + (narrow ? 26 : 70) * u;
-      const legs = (narrow ? 14 : 26) * u;
+    // The billboards, each on its own roof: a cabinet on steel legs and braces, a catwalk with a
+    // rail, lamps on arms that throw soft light down the face, and the game's name lit on the
+    // building below. Wide screens stand them in one row; a phone or a tablet held upright stands
+    // the three phone games on a back row and the two films on a nearer one, so each is big
+    // enough to see what is playing. Their size follows the city's height as well as its width,
+    // so a short window never pushes them up into the name.
+    const tiers = W < 1.7 * H;
+    const legs = (tiers ? 14 : 26) * u;
+    const sign = Math.max(12, Math.min(16, W * 0.0105));
+    let plan;
+    if (tiers) {
+      const tallH = Math.min(W * 0.39, H * 0.31), tallW = tallH / 2.05;
+      const wideW = Math.min(W * 0.42, H * 0.355), wideH = (wideW * 9) / 16;
+      const back = H * 0.07 + tallH + legs;
+      const near = back + sign * 2.4 + 24 * u + wideH + legs;
+      plan = [
+        ["vanity", 0.17, back, tallW, tallH],
+        ["sundae", 0.43, back + 5 * u, tallW, tallH],
+        ["crab", 0.69, back - 3 * u, tallW, tallH],
+        ["streetball", 0.27, near, wideW, wideH],
+        ["lavaspin", 0.73, near + 9 * u, wideW * 0.96, wideH * 0.96],
+      ];
+    } else {
+      const k = Math.min(W, H * 3.48) / 1440, wideW = 288 * k, tallW = 94 * k;
+      plan = [
+        ["streetball", 0.16, H * 0.58, wideW, (wideW * 9) / 16],
+        ["crab", 0.32, H * 0.54, tallW, tallW * 2.05],
+        ["vanity", 0.43, H * 0.52, tallW, tallW * 2.05],
+        ["lavaspin", 0.605, H * 0.66, wideW * 0.92, (wideW * 0.92 * 9) / 16],
+        ["sundae", 0.78, H * 0.56, tallW, tallW * 2.05],
+      ];
+    }
+    function billboard(game, at, roofY, w, h) {
+      const cx = W * at;
+      const host = w + (tiers ? 26 : 70) * u;
       const sy = roofY - legs - h;
-      block(cx - host / 2, host, roofY, "near", true);
+      block(cx - host / 2, host, roofY, "near", true, sign * 2.2);
       el("ellipse", { cx, cy: roofY, rx: w * 0.75, ry: 10 * u, fill: radial(hue[game], 0.5) }, back);
-      el("rect", { x: cx - w / 2 - 6 * u, y: sy - 6 * u, width: w + 12 * u, height: h + 12 * u, rx: 2 * u, fill: "#0b0d1f" }, back);
+      el("rect", { x: cx - w / 2 - 6 * u, y: sy - 6 * u, width: w + 12 * u, height: h + 12 * u, rx: 2 * u, fill: "#0b0d1f", stroke: "#f4ebdd", "stroke-opacity": 0.07 }, back);
       const n = w > 120 * u ? 3 : 2;
       const lx = (i) => cx - w / 2 + (w * (i + 0.5)) / n;
       for (let i = 0; i < n; i++) el("rect", { x: lx(i) - 1.8 * u, y: sy + h + 6 * u, width: 3.6 * u, height: legs, fill: "#0b0d1f" }, back);
@@ -116,11 +138,15 @@
       }
       el("rect", { x: cx - w / 2 - 10 * u, y: sy + h + 8 * u, width: w + 20 * u, height: 2.4 * u, fill: "#121634" }, back);
       el("path", { d: `M${cx - w / 2 - 10 * u} ${sy + h + u} H${cx + w / 2 + 10 * u}`, stroke: "#121634", "stroke-width": u }, back);
-      Object.assign(boards[game].style, { left: `${cx - w / 2}px`, top: `${sy}px`, width: `${w}px`, height: `${h}px` });
-      const canvas = boards[game].querySelector("canvas");
+      const board = boards[game];
+      Object.assign(board.style, { left: `${cx - w / 2}px`, top: `${sy}px`, width: `${w}px`, height: `${h}px` });
+      board.style.setProperty("--hue", hue[game]);
+      board.style.setProperty("--sign", `${sign.toFixed(1)}px`);
+      board.style.setProperty("--drop", `${(legs + sign * 0.55).toFixed(1)}px`);
+      const canvas = board.querySelector("canvas");
       canvas.width = Math.round(w * devicePixelRatio);
       canvas.height = Math.round(h * devicePixelRatio);
-      paint(boards[game]);
+      paint(board);
       const lamps = w > 120 * u ? 4 : 2;
       for (let i = 0; i < lamps; i++) {
         const x = cx - w / 2 + (w * (i + 0.5)) / lamps;
@@ -131,11 +157,7 @@
         el("path", { d: `M${cx2 - 3 * u} ${sy} L${cx2 + 3 * u} ${sy} L${cx2 + spread} ${sy + h * 0.5} L${cx2 - spread} ${sy + h * 0.5} Z`, fill: linear([[0, "#fff6e0", 0.16], [1, "#fff6e0", 0]], fdefs) }, front);
       }
     }
-    billboard("streetball", H * 0.58, wideW, (wideW * 9) / 16);
-    billboard("lavaspin", H * 0.66, wideW * 0.92, (wideW * 0.92 * 9) / 16);
-    billboard("vanity", H * 0.52, tallW, tallW * 2.05);
-    billboard("sundae", H * 0.56, tallW, tallW * 2.05);
-    billboard("crab", H * 0.54, tallW, tallW * 2.05);
+    for (const [game, at, roofY, w, h] of plan) billboard(game, at, roofY, w, h);
     // the kettle's roof at the right edge
     block(W * 0.88, W * 0.14, H * 0.38, "near", true);
   }

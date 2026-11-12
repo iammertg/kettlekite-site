@@ -12,7 +12,7 @@
 .stars { position: absolute; inset: 0 0 42% 0; width: 100%; height: 58%; }
 .stars circle { fill: var(--ivory); }
 .stars .tw { animation: twinkle 4.5s ease-in-out infinite; }
-@keyframes twinkle { 0%, 100% { opacity: 0.25; } 50% { opacity: 0.95; } }
+@keyframes twinkle { 0%, 100% { opacity: 0.35; } 50% { opacity: 0.85; } }
 
 /* now and then a star falls: a short streak whose tail grows behind its head, then fades */
 .meteors { position: absolute; inset: 0 0 35% 0; overflow: hidden; pointer-events: none; }
@@ -51,10 +51,28 @@
 .city { position: absolute; left: 0; right: 0; bottom: 0; height: var(--city); z-index: 1; }
 .city svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
 .city .front { pointer-events: none; }
-.board { position: absolute; display: block; background: #0b0d1f center / cover no-repeat; }
+/* each screen spills a little of its game's light into the night */
+.board {
+  position: absolute; display: block; background: #0b0d1f center / cover no-repeat; text-decoration: none;
+  box-shadow: 0 0 34px 4px color-mix(in srgb, var(--hue, #f4ebdd) 20%, transparent);
+  transition: filter 0.25s ease;
+}
 .board canvas { display: block; width: 100%; height: 100%; }
 /* the videos play unseen; city.js draws their frames into the canvas (see there why) */
 .board video { position: absolute; inset: 0; width: 100%; height: 100%; visibility: hidden; }
+/* the game's name, lit on the building under its billboard (city.js keeps that band of wall dark) */
+.board .sign {
+  position: absolute; left: 50%; top: calc(100% + var(--drop, 30px)); transform: translateX(-50%);
+  font: 400 var(--sign, 15px)/1 var(--display); font-variation-settings: "opsz" 24; letter-spacing: 0.01em; white-space: nowrap;
+  color: color-mix(in srgb, var(--hue, #f4ebdd) 82%, #fff8ee);
+  text-shadow: 0 0 10px color-mix(in srgb, var(--hue, #f4ebdd) 45%, transparent);
+  opacity: 0.86; transition: opacity 0.25s ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  .board:hover { filter: brightness(1.1); }
+  .board:hover .sign { opacity: 1; }
+}
+.board:active { filter: brightness(0.94); }
 .beacon { animation: beacon 2.8s ease-in-out infinite; }
 @keyframes beacon { 0%, 100% { opacity: 0.15; } 50% { opacity: 1; } }
 
@@ -169,7 +187,7 @@ html:has(body.home) { scroll-snap-type: y mandatory; }
 .studio { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(18rem, 33rem); gap: 2rem 5rem; align-items: start; padding-top: clamp(7rem, 17vw, 15rem); padding-bottom: clamp(4rem, 9vw, 8rem); }
 .studio-title { font-size: clamp(2.8rem, 6.4vw, 6.6rem); font-weight: 290; letter-spacing: -0.04em; line-height: 0.95; }
 .studio-body p { color: var(--ivory-2); font-size: clamp(1.08rem, 1.3vw, 1.2rem); line-height: 1.65; }
-.studio-body a { color: var(--ivory); }
+.studio-body a { display: inline-block; padding-block: 0.65rem; margin-block: -0.65rem; color: var(--ivory); }
 .contact { padding-bottom: clamp(5rem, 10vw, 9rem); }
 .contact-title { font-size: clamp(1.6rem, 2.6vw, 2.2rem); font-weight: 340; margin-bottom: 1rem; color: var(--ivory-2); }
 .mail {
@@ -192,15 +210,22 @@ html:has(body.home) { scroll-snap-type: y mandatory; }
 /* ——— Narrow screens ——— */
 /* phone taps: the bar's and the footer's links keep their look and get a 44 px target */
 @media (max-width: 760px) {
-  .nav a, .studio-body a { display: inline-block; }
+  .nav a { display: inline-block; }
   .nav a { min-width: 44px; text-align: center; }
-  .bar .brand, .nav a, .studio-body a { padding-block: 0.65rem; margin-block: -0.65rem; }
+  .bar .brand, .nav a { padding-block: 0.65rem; margin-block: -0.65rem; }
   .foot ul { gap: 0 1.5rem; }
   .foot a { display: inline-block; padding-block: 0.7rem; }
 }
+/* the smallest phones: the bar keeps the kite mark and the links (the name stands just below it,
+   in the sky), and the line wraps beside the kite instead of running under it */
+.brand .kite { flex-shrink: 0; }
+@media (max-width: 350px) {
+  .bar .brand { font-size: 0; gap: 0; padding: 11px; margin: -11px; }
+  .lede { max-width: 15ch; }
+}
 @media (max-width: 860px) {
   .flyer { left: 62%; top: 12%; }
-  .sky { --city: 40%; }
+  .sky { --city: 58%; } /* two rows of rooftops on an upright screen */
   .kettle { right: 2%; width: 58px; }
   .games a { grid-template-columns: 1fr; gap: 0.3rem; }
   .g-where { text-align: left; }
