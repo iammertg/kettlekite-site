@@ -2,17 +2,50 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Page not found · Kettlekite</title>
+<meta name="theme-color" content="#0d0f22">
 <link rel="icon" href="/assets/kite.svg" type="image/svg+xml">
+<link rel="preload" href="/assets/fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/fonts/fonts.css">
 <link rel="stylesheet" href="/assets/kk.css">
+<style>
+  /* a kite whose string has come loose, drifting off on its own */
+  .lost { width: 76px; margin: 0 0 2.2rem; transform-origin: 50% 97%; animation: drift 7.5s ease-in-out infinite; }
+  .lost svg { width: 100%; height: auto; overflow: visible; }
+  @keyframes drift { 0%, 100% { transform: rotate(-9deg); } 50% { transform: rotate(-2deg) translateY(-4px); } }
+  .doc .actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 2rem; }
+  ::selection { background: rgba(240, 169, 46, 0.34); color: #fff8ee; }
+  @media (max-width: 760px) { .bar .brand { padding-block: 0.65rem; margin-block: -0.65rem; } }
+  @media (prefers-reduced-motion: reduce) { .lost { transform: rotate(-6deg); } }
+</style>
 </head>
 <body>
-<header class="wrap bar"><a class="brand" href="/">Kettlekite</a></header>
+<header class="bar">
+  <a class="brand" href="/" aria-label="Kettlekite, home">
+    <svg class="kite" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 3 L56 26 L32 61 Z" fill="#5fa59a"/><path d="M32 3 L8 26 L32 61 Z" fill="#f0a92e"/><path d="M32 3 V61 M8 26 H56" stroke="#2e2621" stroke-width="2.5" stroke-linecap="round" opacity=".55"/></svg>
+    Kettlekite
+  </a>
+</header>
 <main class="wrap doc">
-  <h1>This page doesn't exist</h1>
-  <p>The link may be old. Each game has its own site with support, privacy and terms: start from the <a href="/">Kettlekite home page</a>, or write to <a href="mailto:support@kettlekite.com">support@kettlekite.com</a>.</p>
+  <div class="lost" aria-hidden="true">
+    <svg viewBox="0 0 120 230">
+      <defs>
+        <linearGradient id="sheen-l" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffc864"/><stop offset="1" stop-color="#e2911c"/></linearGradient>
+        <linearGradient id="sheen-r" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7cc2b5"/><stop offset="1" stop-color="#3f8b80"/></linearGradient>
+      </defs>
+      <path d="M60 146 C 52 176, 78 192, 66 228" fill="none" stroke="#f4ebdd" stroke-opacity=".5" stroke-width="1.6" stroke-linecap="round"/>
+      <path d="M60 4 L104 52 L60 146 Z" fill="url(#sheen-r)"/>
+      <path d="M60 4 L16 52 L60 146 Z" fill="url(#sheen-l)"/>
+      <path d="M60 4 V146 M16 52 H104" stroke="#2e2621" stroke-width="2.6" stroke-linecap="round" opacity=".5"/>
+    </svg>
+  </div>
+  <h1>This page doesn’t exist</h1>
+  <p>The link may be old. Each game has its own site with support, privacy and terms: start from the Kettlekite home page, or write to us.</p>
+  <div class="actions">
+    <a class="btn solid" href="/">Kettlekite home page</a>
+    <a class="btn line" href="mailto:support@kettlekite.com">support@kettlekite.com</a>
+  </div>
 </main>
 </body>
 </html>

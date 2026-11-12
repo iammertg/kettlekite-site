@@ -104,7 +104,7 @@
 .peek img.on { opacity: 1; transform: translate(-50%, -50%); }
 
 /* ——— Chapters: one screen each. Its scene assembles as it rises into view (--p, 0 → 1) and
-   is whole by the time it fills the screen; it drifts apart as it leaves (--x, 0 → 1). ——— */
+   is whole by the time it fills the screen; it drifts apart as it leaves (--leave, 0 → 1). ——— */
 .chapter { position: relative; height: 100svh; }
 .chapter .stage { position: relative; height: 100%; overflow: hidden; }
 
@@ -121,7 +121,7 @@ html:has(body.home) { scroll-snap-type: y mandatory; }
 
 /* film: the game itself, full bleed */
 .film .stage { background: #08090f; }
-.film .bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform: translate3d(0, calc(var(--x, 0) * 24vh), 0) scale(calc(1.2 - var(--p, 0) * 0.09)); }
+.film .bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform: translate3d(0, calc(var(--leave, 0) * 24vh), 0) scale(calc(1.2 - var(--p, 0) * 0.09)); }
 .film .shade {
   position: absolute; inset: 0;
   background:
@@ -148,7 +148,7 @@ html:has(body.home) { scroll-snap-type: y mandatory; }
 .scene { position: absolute; inset: 0; }
 .float {
   position: absolute; left: var(--x); top: var(--y); width: var(--w); height: auto;
-  transform: translate3d(calc(var(--mx, 0) * var(--d) * -22px), calc(((1 - var(--p, 0)) * 30vh - var(--x, 0) * 18vh) * var(--d)), 0) rotate(calc(var(--r) + (1 - var(--p, 0)) * var(--d) * -16deg));
+  transform: translate3d(calc(var(--mx, 0) * var(--d) * -22px), calc(((1 - var(--p, 0)) * 30vh - var(--leave, 0) * 18vh) * var(--d)), 0) rotate(calc(var(--r) + (1 - var(--p, 0)) * var(--d) * -16deg));
   filter: drop-shadow(0 26px 34px rgba(8, 4, 10, 0.4));
   will-change: transform;
 }
@@ -181,7 +181,18 @@ html:has(body.home) { scroll-snap-type: y mandatory; }
 .tail .bow { transform-box: fill-box; transform-origin: center; transform: scale(0); transition: transform 0.9s cubic-bezier(0.34, 1.56, 0.64, 1); }
 .tail .bow.on { transform: scale(1); }
 
+::selection { background: rgba(240, 169, 46, 0.34); color: #fff8ee; }
+.foot a { display: inline-block; padding-block: 0.3rem; }
+
 /* ——— Narrow screens ——— */
+/* phone taps: the bar's and the footer's links keep their look and get a 44 px target */
+@media (max-width: 760px) {
+  .nav a, .studio-body a { display: inline-block; }
+  .nav a { min-width: 44px; text-align: center; }
+  .bar .brand, .nav a, .studio-body a { padding-block: 0.65rem; margin-block: -0.65rem; }
+  .foot ul { gap: 0 1.5rem; }
+  .foot a { display: inline-block; padding-block: 0.7rem; }
+}
 @media (max-width: 860px) {
   .flyer { left: 62%; top: 12%; }
   .sky { --city: 40%; }
@@ -193,13 +204,15 @@ html:has(body.home) { scroll-snap-type: y mandatory; }
   .lavaspin .title { order: 0; text-align: left; }
   .film .title { font-size: clamp(3.6rem, 17vw, 6rem); }
   .wordmark { font-size: 15vw; }
-  .device { top: 26%; left: 50%; }
+  /* the handset's top clears the bar: its centre sits at least half its height (2.18 × its width) below it */
+  .device { top: max(26%, calc(4.25rem + min(42.5vw, 191.6px))); left: 50%; }
   .sundae .device { left: 50%; }
   .device .phone { width: min(39vw, 176px); padding: 7px; border-radius: 34px; }
   .device .phone video { border-radius: 27px; }
   .device .phone::before { top: 13px; height: 14px; }
   .showcase .side .where { font-size: 0.95rem; }
-  .float { width: calc(var(--w) * 1.7); opacity: 0.85; }
+  /* the pieces gather round the handset, clear of the words below it */
+  .float { top: calc(var(--y) * 0.56); width: calc(var(--w) * 1.7); opacity: 0.85; }
   .showcase .copy { align-items: flex-end; padding-bottom: 2.4rem; background: linear-gradient(0deg, rgba(10, 6, 10, 0.9) 0%, rgba(10, 6, 10, 0.55) 30%, transparent 52%); }
   .sundae .copy { background: linear-gradient(0deg, rgba(5, 14, 13, 0.9) 0%, rgba(5, 14, 13, 0.55) 30%, transparent 52%); }
   .crab .copy { background: linear-gradient(0deg, rgba(4, 12, 18, 0.9) 0%, rgba(4, 12, 18, 0.55) 30%, transparent 52%); }
@@ -209,11 +222,15 @@ html:has(body.home) { scroll-snap-type: y mandatory; }
 }
 /* short phones: a smaller handset, so it clears the game's name below it */
 @media (max-width: 860px) and (max-height: 740px) {
+  .device { top: max(26%, calc(4.25rem + min(32.7vw, 16.4svh))); }
   .device .phone { width: min(30vw, 15svh); padding: 5px; border-radius: 24px; }
   .device .phone video { border-radius: 19px; }
   .device .phone::before { top: 9px; height: 10px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .float, .device, .film .bg, .film .title, .film .side, .showcase .side { transform: none !important; }
+  .film .bg, .film .title, .film .side, .showcase .side { transform: none !important; }
+  /* still, but the handset stays centred on its place and each piece keeps its tilt */
+  .device { transform: translate(-50%, -50%) !important; }
+  .float { transform: rotate(var(--r)) !important; }
   .film .side { opacity: 1; }
 }

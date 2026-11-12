@@ -81,9 +81,9 @@
       pts.push([edge + side * Math.min(10, w * 0.008), (last[1] + k[1]) / 2], k);
       side = -side;
     }
-    // the end of the tail curls under the last game
-    const end = knots[knots.length - 1];
-    pts.push([edge + 14, end[1] + 60], [edge + 32, end[1] + 70]);
+    // the end of the tail curls under the last game, in the margin, clear of the game's lines
+    const below = rows[rows.length - 1].getBoundingClientRect().bottom + scrollY;
+    pts.push([edge + 4, below - 10], [edge + Math.min(18, gutter * 0.4), below + 16]);
     ribbon.setAttribute("d", smooth(pts));
     length = ribbon.getTotalLength();
     ribbon.style.strokeDasharray = `${length} ${length}`;
@@ -139,7 +139,8 @@
     for (const b of bows.children) b.classList.toggle("on", +b.dataset.y < reach);
   }
 
-  // chapter motion: --p runs 0 → 1 while a chapter rises into view, --x 0 → 1 while it leaves.
+  // chapter motion: --p runs 0 → 1 while a chapter rises into view, --leave 0 → 1 while it leaves.
+  // (Not --x: the floating pieces already use --x for their place, and would shadow it.)
   // Only the chapter filling most of the screen plays its video: with two playing videos on screen,
   // Chrome on a Mac drops the whole page to 30 fps, which is just when one chapter slides over another.
   function chapterMotion() {
@@ -150,7 +151,7 @@
       const p = Math.min(1, Math.max(0, 1 - r.top / vh));
       const x = Math.min(1, Math.max(0, -r.top / vh));
       c.style.setProperty("--p", p.toFixed(4));
-      c.style.setProperty("--x", x.toFixed(4));
+      c.style.setProperty("--leave", x.toFixed(4));
       near.set(c, r.top < vh * 2 && r.bottom > -vh);
       const shown = Math.min(r.bottom, vh) - Math.max(r.top, 0);
       if (shown > most) { most = shown; lead = c; }
