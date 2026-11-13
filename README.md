@@ -10,7 +10,7 @@ Each game has its own site and repo on its own subdomain:
 | https://kettlekite.com | `iammertg/kettlekite-site` (this repo) |
 | https://vanityjam.kettlekite.com | `iammertg/kettlekite-vanityjam` |
 | https://sundaejam.kettlekite.com | `iammertg/kettlekite-sundaejam` |
-| https://crabsiege.kettlekite.com (not up yet) | `iammertg/kettlekite-crabsiege` (local only, waiting for Mert's OK and DNS) |
+| https://crabsiege.kettlekite.com (not up yet) | `iammertg/kettlekite-crabsiege` (private since 2026-11-13, no Pages and no DNS yet; Pages from a private repo needs a paid GitHub plan, the other sites are public) |
 
 `assets/kk.css` (layout, type, components) and `assets/fonts/` (Fraunces + Nunito Sans, SIL OFL 1.1, self-hosted) are the shared base. After changing them run `scripts/sync-shared.sh`, which copies them into every `../kettlekite-*` site, then commit and push each site.
 
